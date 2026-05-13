@@ -24,9 +24,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/zkangning/towards_mmskills"
-Repository = "https://github.com/zkangning/towards_mmskills"
-Issues = "https://github.com/zkangning/towards_mmskills/issues"
+Homepage = "https://github.com/DeepExperience/MMSkills"
+Repository = "https://github.com/DeepExperience/MMSkills"
+Issues = "https://github.com/DeepExperience/MMSkills/issues"
 
 [tool.setuptools]
 packages = ["mm_agents", "mm_agents.utils"]

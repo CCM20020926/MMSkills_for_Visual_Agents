@@ -11,7 +11,7 @@
 [![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://zkangning.github.io/towards_mmskills/)
 [![Skill Library](https://img.shields.io/badge/Skill%20Library-247%20Ubuntu%20Skills-4420A8.svg)](https://zkangning.github.io/towards_mmskills/skills.html)
 [![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://zkangning.github.io/towards_mmskills/cases.html)
-[![GitHub stars](https://img.shields.io/github/stars/zkangning/towards_mmskills?style=social)](https://github.com/zkangning/towards_mmskills/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
 
 </div>
 
@@ -193,7 +193,7 @@ Any screenshot-capable VLM served through an OpenAI-compatible chat-completions 
 ### 1. Clone MMSkills
 
 ```bash
-git clone https://github.com/zkangning/towards_mmskills.git
+git clone https://github.com/DeepExperience/MMSkills.git
 cd towards_mmskills
 ```
 
@@ -340,7 +340,7 @@ If you use MMSkills in your research or applications, please cite this repositor
 @software{mmskills2026,
   title = {MMSkills: Towards Multimodal Skills for General Visual Agents},
   year = {2026},
-  url = {https://github.com/zkangning/towards_mmskills}
+  url = {https://github.com/DeepExperience/MMSkills}
 }
 ```
 
