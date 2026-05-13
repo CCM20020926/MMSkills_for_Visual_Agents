@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://zkangning.github.io/towards_mmskills/assets/mmskills_title.svg" alt="MMSkills" width="440"/><br>
+  <img src="https://deepexperience.github.io/MMSkills/assets/mmskills_title.svg" alt="MMSkills" width="440"/><br>
   Towards Multimodal Skills for General Visual Agents
 </h1>
 
@@ -8,18 +8,18 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![OSWorld](https://img.shields.io/badge/Benchmark-OSWorld-7b39e2.svg)](https://github.com/xlang-ai/OSWorld)
-[![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://zkangning.github.io/towards_mmskills/)
-[![Skill Library](https://img.shields.io/badge/Skill%20Library-247%20Ubuntu%20Skills-4420A8.svg)](https://zkangning.github.io/towards_mmskills/skills.html)
-[![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://zkangning.github.io/towards_mmskills/cases.html)
+[![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://deepexperience.github.io/MMSkills/)
+[![Skill Library](https://img.shields.io/badge/Skill%20Library-247%20Ubuntu%20Skills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
+[![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
 [![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
 
 </div>
 
 <p align="center">
   <a href="#-latest-news">News</a> |
-  <a href="https://zkangning.github.io/towards_mmskills/">Website</a> |
-  <a href="https://zkangning.github.io/towards_mmskills/skills.html">Skill Library</a> |
-  <a href="https://zkangning.github.io/towards_mmskills/cases.html">Demos</a> |
+  <a href="https://deepexperience.github.io/MMSkills/">Website</a> |
+  <a href="https://deepexperience.github.io/MMSkills/skills.html">Skill Library</a> |
+  <a href="https://deepexperience.github.io/MMSkills/cases.html">Demos</a> |
   <a href="#-overview">Overview</a> |
   <a href="#-installation">Installation</a> |
   <a href="#-quick-start">Quick Start</a> |
@@ -34,15 +34,15 @@
 
 ## 📣 Latest News
 
-- **[May 2026]** The website now includes [demo video comparisons](https://zkangning.github.io/towards_mmskills/cases.html) for no-skill, text-only, and multimodal MMSkills runs.
-- **[May 2026]** The project website and searchable [MMSkills Library](https://zkangning.github.io/towards_mmskills/skills.html) are live, indexing **247 Ubuntu GUI skills** from the open-source skill assets.
+- **[May 2026]** The website now includes [demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html) for no-skill, text-only, and multimodal MMSkills runs.
+- **[May 2026]** The project website and searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) are live, indexing **247 Ubuntu GUI skills** from the open-source skill assets.
 - **[May 2026]** Public MMSkills release is available with a compact multimodal desktop-skill subset, runtime agent adapters, and OSWorld integration files.
 - **[May 2026]** The released package includes Ubuntu skills across Chrome, GIMP, LibreOffice, OS, Thunderbird, VLC, VS Code, and multi-app workflows.
 - **[May 2026]** The branch-loaded MMSkill runtime can run in text-only or multimodal skill modes with model-agnostic OpenAI-compatible and native Gemini-compatible endpoints.
 
 ## 🎬 Demos
 
-Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [zkangning.github.io/towards_mmskills/cases.html](https://zkangning.github.io/towards_mmskills/cases.html).
+Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [deepexperience.github.io/MMSkills/cases.html](https://deepexperience.github.io/MMSkills/cases.html).
 
 <details open>
 <summary><h3>1. Calc merged headers</h3></summary>
@@ -129,16 +129,16 @@ Builds the requested clustered chart in LibreOffice Calc. The side-by-side run s
 **MMSkills** is a framework for representing, loading, and using reusable multimodal procedural knowledge for visual agents. Each skill combines textual procedure guidance, compact state-card metadata, and optional visual references. At inference time, the agent keeps only lightweight skill hints in the main context, then opens a temporary skill branch when task state suggests that a skill may help.
 
 <div align="center">
-  <img src="https://zkangning.github.io/towards_mmskills/assets/full_figure.png" width="95%" alt="MMSkills overview" />
+  <img src="https://deepexperience.github.io/MMSkills/assets/full_figure.png" width="95%" alt="MMSkills overview" />
 </div>
 
 This repository is a focused open-source release. It is not a full OSWorld fork; instead, it provides the MMSkill runtime layer, an install script, OSWorld runner patches, task-to-skill mappings, and a representative public skill library.
 
 Project pages:
 
-- [MMSkills website](https://zkangning.github.io/towards_mmskills/)
-- [Searchable Ubuntu Skill Library](https://zkangning.github.io/towards_mmskills/skills.html)
-- [Demo video comparisons](https://zkangning.github.io/towards_mmskills/cases.html)
+- [MMSkills website](https://deepexperience.github.io/MMSkills/)
+- [Searchable Ubuntu Skill Library](https://deepexperience.github.io/MMSkills/skills.html)
+- [Demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html)
 
 Website frontend files are published from the `gh-pages` branch. The `main` branch is kept focused on the open-source code, runtime integration, skills, and documentation.
 
@@ -295,7 +295,7 @@ Use `--domain all` for the full no-Google-Drive OSWorld split. The runner writes
 
 The website indexes **247 Ubuntu GUI skills** from the open-source skill assets. Each skill card links to a structured view of its `SKILL.md`, runtime state cards, and ordered visual references.
 
-Browse the live library at [zkangning.github.io/towards_mmskills/skills.html](https://zkangning.github.io/towards_mmskills/skills.html).
+Browse the live library at [deepexperience.github.io/MMSkills/skills.html](https://deepexperience.github.io/MMSkills/skills.html).
 
 The repository also includes a compact runtime-ready subset under [`skills_library/`](skills_library/) for immediate OSWorld integration.
 
