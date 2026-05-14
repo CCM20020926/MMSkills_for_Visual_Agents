@@ -8,6 +8,7 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![OSWorld](https://img.shields.io/badge/Benchmark-OSWorld-7b39e2.svg)](https://github.com/xlang-ai/OSWorld)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.13527-b31b1b.svg)](https://arxiv.org/abs/2605.13527)
 [![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://deepexperience.github.io/MMSkills/)
 [![Skill Library](https://img.shields.io/badge/Skill%20Library-247%20Ubuntu%20Skills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
 [![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
@@ -17,6 +18,7 @@
 
 <p align="center">
   <a href="#-latest-news">News</a> |
+  <a href="https://arxiv.org/abs/2605.13527">Paper</a> |
   <a href="https://deepexperience.github.io/MMSkills/">Website</a> |
   <a href="https://deepexperience.github.io/MMSkills/skills.html">Skill Library</a> |
   <a href="https://deepexperience.github.io/MMSkills/cases.html">Demos</a> |
@@ -34,6 +36,7 @@
 
 ## 📣 Latest News
 
+- **[May 2026]** The MMSkills paper is available on [arXiv:2605.13527](https://arxiv.org/abs/2605.13527).
 - **[May 2026]** The website now includes [demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html) for no-skill, text-only, and multimodal MMSkills runs.
 - **[May 2026]** The project website and searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) are live, indexing **247 Ubuntu GUI skills** from the open-source skill assets.
 - **[May 2026]** Public MMSkills release is available with a compact multimodal desktop-skill subset, runtime agent adapters, and OSWorld integration files.
@@ -136,6 +139,7 @@ This repository is a focused open-source release. It is not a full OSWorld fork;
 
 Project pages:
 
+- [arXiv paper](https://arxiv.org/abs/2605.13527)
 - [MMSkills website](https://deepexperience.github.io/MMSkills/)
 - [Searchable Ubuntu Skill Library](https://deepexperience.github.io/MMSkills/skills.html)
 - [Demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html)
@@ -334,13 +338,17 @@ This project is released under the [Apache License 2.0](LICENSE). Portions of th
 
 ## 📝 Citation
 
-If you use MMSkills in your research or applications, please cite this repository:
+If you use MMSkills in your research or applications, please cite our arXiv paper:
 
 ```bibtex
-@software{mmskills2026,
+@misc{zhang2026mmskills,
   title = {MMSkills: Towards Multimodal Skills for General Visual Agents},
+  author = {Kangning Zhang and Shuai Shao and Qingyao Li and Jianghao Lin and Lingyue Fu and Shijian Wang and Wenxiang Jiao and Yuan Lu and Weiwen Liu and Weinan Zhang and Yong Yu},
   year = {2026},
-  url = {https://github.com/DeepExperience/MMSkills}
+  eprint = {2605.13527},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.AI},
+  url = {https://arxiv.org/abs/2605.13527}
 }
 ```
 

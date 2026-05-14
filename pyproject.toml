@@ -27,6 +27,7 @@ classifiers = [
 Homepage = "https://github.com/DeepExperience/MMSkills"
 Repository = "https://github.com/DeepExperience/MMSkills"
 Issues = "https://github.com/DeepExperience/MMSkills/issues"
+Paper = "https://arxiv.org/abs/2605.13527"
 
 [tool.setuptools]
 packages = ["mm_agents", "mm_agents.utils"]
