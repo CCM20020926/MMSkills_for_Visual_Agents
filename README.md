@@ -10,7 +10,7 @@
 [![OSWorld](https://img.shields.io/badge/Benchmark-OSWorld-7b39e2.svg)](https://github.com/xlang-ai/OSWorld)
 [![arXiv](https://img.shields.io/badge/arXiv-2605.13527-b31b1b.svg)](https://arxiv.org/abs/2605.13527)
 [![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://deepexperience.github.io/MMSkills/)
-[![Skill Library](https://img.shields.io/badge/Skill%20Library-281%20MMSkills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
+[![Skill Library](https://img.shields.io/badge/Skill%20Library-515%20MMSkills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
 [![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
 [![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
 
@@ -38,7 +38,7 @@
 
 - **[May 2026]** The MMSkills paper is available on [arXiv:2605.13527](https://arxiv.org/abs/2605.13527).
 - **[May 2026]** The website now includes [demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html) for no-skill, text-only, and multimodal MMSkills runs.
-- **[May 2026]** The project website and searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) are live, indexing **281 skills** across Ubuntu, VAB-Minecraft, and Mario assets.
+- **[May 2026]** The project website and searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) are live, indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario assets.
 - **[May 2026]** Public MMSkills release is available with a compact multimodal desktop-skill subset, runtime agent adapters, and OSWorld integration files.
 - **[May 2026]** The released package includes Ubuntu skills across Chrome, GIMP, LibreOffice, OS, Thunderbird, VLC, VS Code, and multi-app workflows.
 - **[May 2026]** The branch-loaded MMSkill runtime can run in text-only or multimodal skill modes with model-agnostic OpenAI-compatible and native Gemini-compatible endpoints.
@@ -297,7 +297,7 @@ Use `--domain all` for the full no-Google-Drive OSWorld split. The runner writes
 
 ## 📚 Skill Library
 
-The website indexes **281 skills** from the open-source Ubuntu, VAB-Minecraft, and Mario skill assets. Each skill card links to a structured view of its `SKILL.md`, runtime state cards, and ordered visual references.
+The website indexes **515 skills** from the open-source Ubuntu, macOS, VAB-Minecraft, and Mario skill assets. Each skill card links to a structured view of its `SKILL.md`, runtime state cards, and ordered visual references.
 
 Browse the live library at [deepexperience.github.io/MMSkills/skills.html](https://deepexperience.github.io/MMSkills/skills.html).
 
