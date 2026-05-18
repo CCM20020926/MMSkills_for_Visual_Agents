@@ -13,6 +13,7 @@
 [![Skill Library](https://img.shields.io/badge/Skill%20Library-515%20MMSkills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
 [![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
 [![Agent Adapter](https://img.shields.io/badge/Agent%20Adapter-Codex%20%7C%20OpenClaw%20%7C%20Claude%20Code-0f766e.svg)](agent_integrations/mmskills-agent-adapter/)
+[![Submit MMSkill](https://img.shields.io/badge/Submit-MMSkill%20Package-a15c11.svg)](https://deepexperience.github.io/MMSkills/submit.html)
 [![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
 
 </div>
@@ -24,6 +25,7 @@
   <a href="https://deepexperience.github.io/MMSkills/skills.html">Skill Library</a> |
   <a href="https://deepexperience.github.io/MMSkills/cases.html">Demos</a> |
   <a href="#-agent-adapter">Agent Adapter</a> |
+  <a href="#-community-submissions">Submit MMSkills</a> |
   <a href="#-overview">Overview</a> |
   <a href="#-installation">Installation</a> |
   <a href="#-quick-start">Quick Start</a> |
@@ -43,6 +45,7 @@
 - 🌐 **[May 2026]** The project website is live with [demo comparisons](https://deepexperience.github.io/MMSkills/cases.html) and a searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
 - 🚀 **[May 2026]** The public release includes a compact multimodal desktop-skill subset, OSWorld-ready runtime adapters, task mappings, and model-agnostic skill modes.
 - 🔌 **[May 2026]** We added the **MMSkills Agent Adapter** for Codex, OpenClaw, and Claude Code, with one-line Codex installation and on-demand Hugging Face skill retrieval.
+- 🌱 **[May 2026]** Community MMSkill submissions are open for new domains such as autonomous driving, robotics, mobile agents, and beyond.
 
 ## 🎬 Demos
 
@@ -162,6 +165,10 @@ Website frontend files are published from the `gh-pages` branch. The `main` bran
     <td width="50%"><strong>⚡ Agent-product adapter</strong><br>The <code>mmskills-agent-adapter</code> can be installed as a Codex skill and reused by OpenClaw or Claude Code through the same package contract.</td>
     <td width="50%"><strong>📦 On-demand skill retrieval</strong><br>Agents search the 515-skill Hugging Face library, download only task-relevant packages, then read <code>SKILL.md</code>, runtime states, and visual references as needed.</td>
   </tr>
+  <tr>
+    <td width="50%"><strong>🌱 Community-extensible library</strong><br>Researchers can submit MMSkill packages for new domains such as autonomous driving, robotics, mobile apps, web agents, and games.</td>
+    <td width="50%"><strong>✅ Review-first publishing</strong><br>Submissions open GitHub issues, notify maintainers, and are reviewed before being normalized into the public Hugging Face library and website.</td>
+  </tr>
 </table>
 
 ## 🔌 Agent Adapter
@@ -193,6 +200,18 @@ python scripts/inspect_skill.py ~/.cache/mmskills/skills/ubuntu/chrome/CHROME_Ma
 ```
 
 For OpenClaw and Claude Code, use the same adapter contract: call the search/download scripts, parse `SKILL.md` and `runtime_state_cards.json`, and route `Images/` into the product's visual grounding or verification layer only when visual evidence is needed.
+
+## 🌱 Community Submissions
+
+We welcome MMSkill packages from new domains. A submission can be a single reusable skill or a new domain collection, such as autonomous driving, robotics, mobile agents, browser workflows, scientific software, games, or other visual-agent environments.
+
+Submit through the website entrypoint or directly through the GitHub issue form:
+
+- Website entry: [deepexperience.github.io/MMSkills/submit.html](https://deepexperience.github.io/MMSkills/submit.html)
+- GitHub issue form: [Submit an MMSkill package](https://github.com/DeepExperience/MMSkills/issues/new?template=skill_submission.yml)
+- Format guide: [docs/submit_mmskills.md](docs/submit_mmskills.md)
+
+Each submission creates a GitHub issue assigned to the maintainer account, so maintainers can receive email notifications through GitHub's repository notification settings. After review, accepted packages are normalized into the MMSkills library, uploaded to the public Hugging Face dataset, and surfaced on the website Skill Library.
 
 ## 🗂️ Repository Layout
 

@@ -10,6 +10,16 @@ Thank you for helping improve MMSkills. This repository is intentionally compact
 - Add small, representative skills with text, state cards, and visual references.
 - Report reproducibility issues with exact command lines and environment details.
 
+## Community Skill Submissions
+
+Use the MMSkill submission issue form for new skill packages or new domains:
+
+```text
+https://github.com/DeepExperience/MMSkills/issues/new?template=skill_submission.yml
+```
+
+See [docs/submit_mmskills.md](docs/submit_mmskills.md) for the package format, review workflow, and acceptance checklist.
+
 ## Skill Contribution Checklist
 
 Each new skill should include:
