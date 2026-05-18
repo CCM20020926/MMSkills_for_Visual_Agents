@@ -53,7 +53,7 @@ Avoid monolithic skills that encode an entire benchmark episode or rely on hidde
 ## Review Workflow
 
 1. Contributor opens a skill submission issue from the website or GitHub issue form.
-2. Maintainers receive the issue notification and inspect the package link or attachment.
+2. Maintainers receive the issue notification and inspect the package link or ZIP attachment.
 3. Maintainers check package structure, licensing, visual references, and reusability.
 4. Accepted packages are normalized into the MMSkills library and added to the public Hugging Face dataset.
 5. The website Skill Library is regenerated so the new domain appears in the public browser.

@@ -11,7 +11,7 @@ body:
       value: |
         Thanks for contributing to the MMSkills community.
 
-        Please provide a downloadable package link or attach a ZIP archive after the issue is created. Maintainers will review the package before it is added to the public MMSkills library.
+        Please provide a downloadable package link or drag a ZIP archive into the package field below. Maintainers will review the package before it is added to the public MMSkills library.
 
         Required package shape:
 
@@ -68,7 +68,7 @@ body:
     id: package_link
     attributes:
       label: Package link or attachment
-      description: Paste a GitHub/Hugging Face/Drive link, or create the issue first and drag a ZIP archive into a follow-up comment.
+      description: Paste a GitHub/Hugging Face/Drive link, or drag a ZIP archive into this field so GitHub uploads it as an attachment.
       placeholder: https://huggingface.co/datasets/<user>/<dataset> or https://github.com/<user>/<repo>/tree/main/<skill-path>
     validations:
       required: true
