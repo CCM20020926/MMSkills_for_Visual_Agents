@@ -36,15 +36,15 @@
 
 ## 📣 Latest News
 
-- 🏆 **[May 2026]** MMSkills ranked **#1 on Hugging Face Daily Papers**.
-- 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
+- 🏆 **[May 2026]** MMSkills ranked **#1 on Hugging Face Daily Papers** on **2026.5.18**.
+- 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills); the paper page is also available on [Hugging Face Papers](https://huggingface.co/papers/2605.13527).
 - 🌐 **[May 2026]** The project website is live with [demo comparisons](https://deepexperience.github.io/MMSkills/cases.html) and a searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
 - 🚀 **[May 2026]** The public release includes a compact multimodal desktop-skill subset, OSWorld-ready runtime adapters, task mappings, and model-agnostic skill modes.
 - 🔌 **[May 2026]** We are exploring integrations with OpenClaw, Codex, and Claude Code. Stay tuned.
 
 ## 🎬 Demos
 
-Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [deepexperience.github.io/MMSkills/cases.html](https://deepexperience.github.io/MMSkills/cases.html).
+Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. These videos show selected trajectory excerpts to highlight behavioral differences between the three settings; they are not complete end-to-end trajectories. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [deepexperience.github.io/MMSkills/cases.html](https://deepexperience.github.io/MMSkills/cases.html).
 
 <details open>
 <summary><h3>1. Calc merged headers</h3></summary>
