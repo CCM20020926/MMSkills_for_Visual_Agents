@@ -162,6 +162,7 @@ Website frontend files are published from the `gh-pages` branch. The `main` bran
 
 ```text
 MMSkills/
+├── agent_integrations/        # Codex/OpenClaw/Claude Code wrapper skill and download helpers
 ├── mm_agents/                 # MMSkill runtime architecture and model adapters
 ├── osworld_integration/       # MMSkills-aware OSWorld runner files
 ├── skills_library/            # Public multimodal skills subset for direct runtime use
@@ -197,7 +198,7 @@ Any screenshot-capable VLM served through an OpenAI-compatible chat-completions 
 
 ```bash
 git clone https://github.com/DeepExperience/MMSkills.git
-cd towards_mmskills
+cd MMSkills
 ```
 
 ### 2. Install Python dependencies
@@ -233,6 +234,26 @@ For native Gemini-compatible routing, pass `--api_backend gemini` and set:
 export GEMINI_BASE_URL="https://your-gemini-compatible-endpoint/v1"
 export GEMINI_API_KEY="your_api_key"
 ```
+
+### 5. Install the Codex Wrapper Skill
+
+MMSkills also ships a lightweight agent-product wrapper under [`agent_integrations/mmskills/`](agent_integrations/mmskills/). The wrapper is installable as a Codex skill and points agents to the full Hugging Face skill dataset for on-demand retrieval.
+
+One-line Codex install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DeepExperience/MMSkills/main/scripts/install_codex_mmskills.sh | bash
+```
+
+Direct Codex skill-installer form:
+
+```bash
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo DeepExperience/MMSkills \
+  --path agent_integrations/mmskills
+```
+
+After restarting Codex, use `$mmskills` to search and load task-relevant packages. The same wrapper contract is intended for OpenClaw and Claude Code: share the MMSkills package format, keep product-specific behavior in thin adapters, and download only the skills needed for the current task from [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
 
 ## 🏃 Quick Start
 
