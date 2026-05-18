@@ -36,14 +36,11 @@
 
 ## 📣 Latest News
 
-- **[May 2026]** The MMSkills dataset is available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
-- **[May 2026]** We are honored that MMSkills ranked **#1 on Hugging Face Daily Papers**.
-- **[May 2026]** We are exploring integrations of MMSkill packages with OpenClaw, Codex, and Claude Code. Stay tuned.
-- **[May 2026]** The website now includes [demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html) for no-skill, text-only, and multimodal MMSkills runs.
-- **[May 2026]** The project website and searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) are live, indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario assets.
-- **[May 2026]** Public MMSkills release is available with a compact multimodal desktop-skill subset, runtime agent adapters, and OSWorld integration files.
-- **[May 2026]** The released package includes Ubuntu skills across Chrome, GIMP, LibreOffice, OS, Thunderbird, VLC, VS Code, and multi-app workflows.
-- **[May 2026]** The branch-loaded MMSkill runtime can run in text-only or multimodal skill modes with model-agnostic OpenAI-compatible and native Gemini-compatible endpoints.
+- 🏆 **[May 2026]** MMSkills ranked **#1 on Hugging Face Daily Papers**.
+- 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
+- 🌐 **[May 2026]** The project website is live with [demo comparisons](https://deepexperience.github.io/MMSkills/cases.html) and a searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
+- 🚀 **[May 2026]** The public release includes a compact multimodal desktop-skill subset, OSWorld-ready runtime adapters, task mappings, and model-agnostic skill modes.
+- 🔌 **[May 2026]** We are exploring integrations with OpenClaw, Codex, and Claude Code. Stay tuned.
 
 ## 🎬 Demos
 
