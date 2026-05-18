@@ -36,7 +36,7 @@ def normalize_skill_path(value: str) -> str:
 
 
 def urlopen_with_retry(url: str, timeout: int = 120):
-    request = urllib.request.Request(url, headers={"User-Agent": "mmskills-agent-wrapper/0.1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "mmskills-agent-adapter/0.1"})
     last_error: Exception | None = None
     for attempt in range(4):
         try:

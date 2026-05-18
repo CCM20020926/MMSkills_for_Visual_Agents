@@ -29,7 +29,7 @@ def cache_path() -> Path:
 
 
 def fetch_json(url: str) -> dict:
-    request = urllib.request.Request(url, headers={"User-Agent": "mmskills-agent-wrapper/0.1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "mmskills-agent-adapter/0.1"})
     last_error: Exception | None = None
     for attempt in range(4):
         try:

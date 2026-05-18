@@ -4,21 +4,21 @@ MMSkills should use one product-neutral package format across agent products. Av
 
 ## Codex
 
-Codex can install this wrapper as a normal skill because this directory contains `SKILL.md`.
+Codex can install this adapter as a normal skill because this directory contains `SKILL.md`.
 
 Direct install through the Codex skill installer:
 
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo DeepExperience/MMSkills \
-  --path agent_integrations/mmskills
+  --path agent_integrations/mmskills-agent-adapter
 ```
 
 After installation, restart Codex and invoke `$mmskills` when the task benefits from reusable visual-agent procedural knowledge.
 
 ## Claude Code / CC
 
-Use the same wrapper content and scripts. If the local Claude Code setup supports skill-style folders, copy or symlink this directory into its skill location. If it does not, keep this directory in the project and instruct the agent to read `SKILL.md`, then use the scripts for search and package retrieval.
+Use the same adapter content and scripts. If the local Claude Code setup supports skill-style folders, copy or symlink this directory into its skill location. If it does not, keep this directory in the project and instruct the agent to read `SKILL.md`, then use the scripts for search and package retrieval.
 
 The shared package format remains unchanged. Only the local install location and image-viewing mechanism should differ.
 

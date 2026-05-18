@@ -12,6 +12,7 @@
 [![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://deepexperience.github.io/MMSkills/)
 [![Skill Library](https://img.shields.io/badge/Skill%20Library-515%20MMSkills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
 [![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
+[![Agent Adapter](https://img.shields.io/badge/Agent%20Adapter-Codex%20%7C%20OpenClaw%20%7C%20Claude%20Code-0f766e.svg)](agent_integrations/mmskills-agent-adapter/)
 [![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
 
 </div>
@@ -22,6 +23,7 @@
   <a href="https://deepexperience.github.io/MMSkills/">Website</a> |
   <a href="https://deepexperience.github.io/MMSkills/skills.html">Skill Library</a> |
   <a href="https://deepexperience.github.io/MMSkills/cases.html">Demos</a> |
+  <a href="#-agent-adapter">Agent Adapter</a> |
   <a href="#-overview">Overview</a> |
   <a href="#-installation">Installation</a> |
   <a href="#-quick-start">Quick Start</a> |
@@ -40,7 +42,7 @@
 - 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills); the paper page is also available on [Hugging Face Papers](https://huggingface.co/papers/2605.13527).
 - 🌐 **[May 2026]** The project website is live with [demo comparisons](https://deepexperience.github.io/MMSkills/cases.html) and a searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
 - 🚀 **[May 2026]** The public release includes a compact multimodal desktop-skill subset, OSWorld-ready runtime adapters, task mappings, and model-agnostic skill modes.
-- 🔌 **[May 2026]** We are exploring integrations with OpenClaw, Codex, and Claude Code. Stay tuned.
+- 🔌 **[May 2026]** We added the **MMSkills Agent Adapter** for Codex, OpenClaw, and Claude Code, with one-line Codex installation and on-demand Hugging Face skill retrieval.
 
 ## 🎬 Demos
 
@@ -156,13 +158,47 @@ Website frontend files are published from the `gh-pages` branch. The `main` bran
     <td width="50%"><strong>🧠 Branch-loaded planning</strong><br>A temporary planner branch consults selected skills and returns concise guidance, fallback advice, and verification cues.</td>
     <td width="50%"><strong>🔌 OSWorld ready</strong><br>Helper scripts install the agent files, runner integration, skills, and task mappings into a local OSWorld checkout.</td>
   </tr>
+  <tr>
+    <td width="50%"><strong>⚡ Agent-product adapter</strong><br>The <code>mmskills-agent-adapter</code> can be installed as a Codex skill and reused by OpenClaw or Claude Code through the same package contract.</td>
+    <td width="50%"><strong>📦 On-demand skill retrieval</strong><br>Agents search the 515-skill Hugging Face library, download only task-relevant packages, then read <code>SKILL.md</code>, runtime states, and visual references as needed.</td>
+  </tr>
 </table>
+
+## 🔌 Agent Adapter
+
+The [`mmskills-agent-adapter`](agent_integrations/mmskills-agent-adapter/) module turns MMSkills into an installable, product-neutral skill adapter for agent systems. It keeps one shared MMSkills package format across Codex, OpenClaw, Claude Code, and future agent products instead of maintaining separate copies for each ecosystem.
+
+The adapter is intentionally lightweight. It does not bundle the full 515-skill asset set inside the repository branch. Instead, it points agents to the public [Hugging Face MMSkills dataset](https://huggingface.co/datasets/zhangkangning/mmskills), searches the metadata index, and downloads only the skill package needed for the current task.
+
+One-line Codex install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DeepExperience/MMSkills/main/scripts/install_codex_mmskills.sh | bash
+```
+
+Direct Codex skill-installer form:
+
+```bash
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo DeepExperience/MMSkills \
+  --path agent_integrations/mmskills-agent-adapter
+```
+
+After restarting Codex, invoke `$mmskills` for GUI-agent or computer-use tasks. The adapter scripts provide the standard flow:
+
+```bash
+python scripts/search_skills.py "chrome bookmark" --package ubuntu
+python scripts/download_skill.py ubuntu/chrome/CHROME_Manage_Bookmarks_Reading_List_And_Shortcuts
+python scripts/inspect_skill.py ~/.cache/mmskills/skills/ubuntu/chrome/CHROME_Manage_Bookmarks_Reading_List_And_Shortcuts
+```
+
+For OpenClaw and Claude Code, use the same adapter contract: call the search/download scripts, parse `SKILL.md` and `runtime_state_cards.json`, and route `Images/` into the product's visual grounding or verification layer only when visual evidence is needed.
 
 ## 🗂️ Repository Layout
 
 ```text
 MMSkills/
-├── agent_integrations/        # Codex/OpenClaw/Claude Code wrapper skill and download helpers
+├── agent_integrations/        # Codex/OpenClaw/Claude Code agent adapters and download helpers
 ├── mm_agents/                 # MMSkill runtime architecture and model adapters
 ├── osworld_integration/       # MMSkills-aware OSWorld runner files
 ├── skills_library/            # Public multimodal skills subset for direct runtime use
@@ -235,9 +271,9 @@ export GEMINI_BASE_URL="https://your-gemini-compatible-endpoint/v1"
 export GEMINI_API_KEY="your_api_key"
 ```
 
-### 5. Install the Codex Wrapper Skill
+### 5. Install the Codex Agent Adapter
 
-MMSkills also ships a lightweight agent-product wrapper under [`agent_integrations/mmskills/`](agent_integrations/mmskills/). The wrapper is installable as a Codex skill and points agents to the full Hugging Face skill dataset for on-demand retrieval.
+MMSkills also ships a lightweight agent-product adapter under [`agent_integrations/mmskills-agent-adapter/`](agent_integrations/mmskills-agent-adapter/). The adapter is installable as a Codex skill and points agents to the full Hugging Face skill dataset for on-demand retrieval. See [Agent Adapter](#-agent-adapter) for the full cross-agent contract.
 
 One-line Codex install:
 
@@ -250,10 +286,10 @@ Direct Codex skill-installer form:
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo DeepExperience/MMSkills \
-  --path agent_integrations/mmskills
+  --path agent_integrations/mmskills-agent-adapter
 ```
 
-After restarting Codex, use `$mmskills` to search and load task-relevant packages. The same wrapper contract is intended for OpenClaw and Claude Code: share the MMSkills package format, keep product-specific behavior in thin adapters, and download only the skills needed for the current task from [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
+After restarting Codex, use `$mmskills` to search and load task-relevant packages. The same adapter contract is intended for OpenClaw and Claude Code: share the MMSkills package format, keep product-specific behavior in thin adapters, and download only the skills needed for the current task from [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills).
 
 ## 🏃 Quick Start
 

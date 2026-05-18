@@ -3,9 +3,9 @@ name: mmskills
 description: Use MMSkills for GUI, computer-use, visual-agent, OSWorld, Ubuntu desktop, macOS, Minecraft, or Mario tasks where reusable multimodal skill packages can guide planning, state recognition, or verification. Also use when installing, downloading, searching, or adapting MMSkills packages for Codex, OpenClaw, Claude Code, or other agent products.
 ---
 
-# MMSkills
+# MMSkills Agent Adapter
 
-MMSkills is a unified wrapper for locating and using multimodal skill packages from the public MMSkills dataset. The same skill package schema should be used across Codex, OpenClaw, Claude Code, and other agent products; product-specific integration should stay in thin adapters, not in duplicated skill content.
+MMSkills Agent Adapter is a unified adapter for locating and using multimodal skill packages from the public MMSkills dataset. The same skill package schema should be used across Codex, OpenClaw, Claude Code, and other agent products; product-specific integration should stay in thin adapters, not in duplicated skill content.
 
 ## Asset Source
 
