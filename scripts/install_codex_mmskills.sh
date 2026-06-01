@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="DeepExperience/MMSkills"
+REPO="zkangning/MMSkills_for_Visual_Agents"
 SKILL_PATH="agent_integrations/mmskills-agent-adapter"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 DEST="$CODEX_HOME/skills/mmskills-agent-adapter"

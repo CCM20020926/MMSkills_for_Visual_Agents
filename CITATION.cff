@@ -4,8 +4,8 @@ title: "MMSkills: Towards Multimodal Skills for General Visual Agents"
 type: software
 authors:
   - name: "MMSkills Contributors"
-repository-code: "https://github.com/DeepExperience/MMSkills"
-url: "https://github.com/DeepExperience/MMSkills"
+repository-code: "https://github.com/zkangning/MMSkills_for_Visual_Agents"
+url: "https://github.com/zkangning/MMSkills_for_Visual_Agents"
 license: "Apache-2.0"
 version: "0.1.0"
 date-released: "2026-05-07"

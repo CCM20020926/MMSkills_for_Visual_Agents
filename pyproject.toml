@@ -24,9 +24,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/DeepExperience/MMSkills"
-Repository = "https://github.com/DeepExperience/MMSkills"
-Issues = "https://github.com/DeepExperience/MMSkills/issues"
+Homepage = "https://github.com/zkangning/MMSkills_for_Visual_Agents"
+Repository = "https://github.com/zkangning/MMSkills_for_Visual_Agents"
+Issues = "https://github.com/zkangning/MMSkills_for_Visual_Agents/issues"
 Paper = "https://arxiv.org/abs/2605.13527"
 
 [tool.setuptools]

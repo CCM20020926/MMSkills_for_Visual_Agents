@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://deepexperience.github.io/MMSkills/assets/mmskills_title.svg" alt="MMSkills" width="440"/><br>
+  <img src="https://zkangning.github.io/MMSkills_for_Visual_Agents/assets/mmskills_title.svg" alt="MMSkills" width="440"/><br>
   Towards Multimodal Skills for General Visual Agents
 </h1>
 
@@ -9,21 +9,21 @@
 [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![OSWorld](https://img.shields.io/badge/Benchmark-OSWorld-7b39e2.svg)](https://github.com/xlang-ai/OSWorld)
 [![arXiv](https://img.shields.io/badge/arXiv-2605.13527-b31b1b.svg)](https://arxiv.org/abs/2605.13527)
-[![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://deepexperience.github.io/MMSkills/)
-[![Skill Library](https://img.shields.io/badge/Skill%20Library-515%20MMSkills-4420A8.svg)](https://deepexperience.github.io/MMSkills/skills.html)
-[![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://deepexperience.github.io/MMSkills/cases.html)
+[![Website](https://img.shields.io/badge/Website-MMSkills-0f766e.svg)](https://zkangning.github.io/MMSkills_for_Visual_Agents/)
+[![Skill Library](https://img.shields.io/badge/Skill%20Library-515%20MMSkills-4420A8.svg)](https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html)
+[![Demos](https://img.shields.io/badge/Demos-4%20Video%20Comparisons-a15c11.svg)](https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html)
 [![Agent Adapter](https://img.shields.io/badge/Agent%20Adapter-Codex%20%7C%20OpenClaw%20%7C%20Claude%20Code-0f766e.svg)](agent_integrations/mmskills-agent-adapter/)
-[![Submit MMSkill](https://img.shields.io/badge/Submit-MMSkill%20Package-a15c11.svg)](https://deepexperience.github.io/MMSkills/submit.html)
-[![GitHub stars](https://img.shields.io/github/stars/DeepExperience/MMSkills?style=social)](https://github.com/DeepExperience/MMSkills/stargazers)
+[![Submit MMSkill](https://img.shields.io/badge/Submit-MMSkill%20Package-a15c11.svg)](https://zkangning.github.io/MMSkills_for_Visual_Agents/submit.html)
+[![GitHub stars](https://img.shields.io/github/stars/zkangning/MMSkills_for_Visual_Agents?style=social)](https://github.com/zkangning/MMSkills_for_Visual_Agents/stargazers)
 
 </div>
 
 <p align="center">
   <a href="#-latest-news">News</a> |
   <a href="https://arxiv.org/abs/2605.13527">Paper</a> |
-  <a href="https://deepexperience.github.io/MMSkills/">Website</a> |
-  <a href="https://deepexperience.github.io/MMSkills/skills.html">Skill Library</a> |
-  <a href="https://deepexperience.github.io/MMSkills/cases.html">Demos</a> |
+  <a href="https://zkangning.github.io/MMSkills_for_Visual_Agents/">Website</a> |
+  <a href="https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html">Skill Library</a> |
+  <a href="https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html">Demos</a> |
   <a href="#-agent-adapter">Agent Adapter</a> |
   <a href="#-community-submissions">Submit MMSkills</a> |
   <a href="#-overview">Overview</a> |
@@ -42,14 +42,14 @@
 
 - 🏆 **[May 2026]** MMSkills ranked **#1 on Hugging Face Daily Papers** on **2026.5.18**.
 - 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills); the paper page is also available on [Hugging Face Papers](https://huggingface.co/papers/2605.13527).
-- 🌐 **[May 2026]** The project website is live with [demo comparisons](https://deepexperience.github.io/MMSkills/cases.html) and a searchable [MMSkills Library](https://deepexperience.github.io/MMSkills/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
+- 🌐 **[May 2026]** The project website is live with [demo comparisons](https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html) and a searchable [MMSkills Library](https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
 - 🚀 **[May 2026]** The public release includes a compact multimodal desktop-skill subset, OSWorld-ready runtime adapters, task mappings, and model-agnostic skill modes.
 - 🔌 **[May 2026]** We added the **MMSkills Agent Adapter** for Codex, OpenClaw, and Claude Code, with one-line Codex installation and on-demand Hugging Face skill retrieval.
 - 🌱 **[May 2026]** Community MMSkill submissions are open for new domains such as autonomous driving, robotics, mobile agents, and beyond.
 
 ## 🎬 Demos
 
-Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. These videos show selected trajectory excerpts to highlight behavioral differences between the three settings; they are not complete end-to-end trajectories. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [deepexperience.github.io/MMSkills/cases.html](https://deepexperience.github.io/MMSkills/cases.html).
+Four OSWorld demos compare the same task under no skills, text-only skill guidance, and multimodal MMSkills. These videos show selected trajectory excerpts to highlight behavioral differences between the three settings; they are not complete end-to-end trajectories. To keep GUI text readable in the GitHub README, each case uses three separate 1080p MP4 players instead of a compressed side-by-side composite. The full video layout is also available at [zkangning.github.io/MMSkills_for_Visual_Agents/cases.html](https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html).
 
 <details open>
 <summary><h3>1. Calc merged headers</h3></summary>
@@ -136,7 +136,7 @@ Builds the requested clustered chart in LibreOffice Calc. The side-by-side run s
 **MMSkills** is a framework for representing, loading, and using reusable multimodal procedural knowledge for visual agents. Each skill combines textual procedure guidance, compact state-card metadata, and optional visual references. At inference time, the agent keeps only lightweight skill hints in the main context, then opens a temporary skill branch when task state suggests that a skill may help.
 
 <div align="center">
-  <img src="https://deepexperience.github.io/MMSkills/assets/full_figure.png" width="95%" alt="MMSkills overview" />
+  <img src="https://zkangning.github.io/MMSkills_for_Visual_Agents/assets/full_figure.png" width="95%" alt="MMSkills overview" />
 </div>
 
 This repository is a focused open-source release. It is not a full OSWorld fork; instead, it provides the MMSkill runtime layer, an install script, OSWorld runner patches, task-to-skill mappings, and a representative public skill library.
@@ -144,9 +144,9 @@ This repository is a focused open-source release. It is not a full OSWorld fork;
 Project pages:
 
 - [arXiv paper](https://arxiv.org/abs/2605.13527)
-- [MMSkills website](https://deepexperience.github.io/MMSkills/)
-- [Searchable Multidomain Skill Library](https://deepexperience.github.io/MMSkills/skills.html)
-- [Demo video comparisons](https://deepexperience.github.io/MMSkills/cases.html)
+- [MMSkills website](https://zkangning.github.io/MMSkills_for_Visual_Agents/)
+- [Searchable Multidomain Skill Library](https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html)
+- [Demo video comparisons](https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html)
 
 Website frontend files are published from the `gh-pages` branch. The `main` branch is kept focused on the open-source code, runtime integration, skills, and documentation.
 
@@ -180,14 +180,14 @@ The adapter is intentionally lightweight. It does not bundle the full 515-skill 
 One-line Codex install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/DeepExperience/MMSkills/main/scripts/install_codex_mmskills.sh | bash
+curl -fsSL https://raw.githubusercontent.com/zkangning/MMSkills_for_Visual_Agents/main/scripts/install_codex_mmskills.sh | bash
 ```
 
 Direct Codex skill-installer form:
 
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo DeepExperience/MMSkills \
+  --repo zkangning/MMSkills_for_Visual_Agents \
   --path agent_integrations/mmskills-agent-adapter
 ```
 
@@ -207,8 +207,8 @@ We welcome MMSkill packages from new domains. A submission can be a single reusa
 
 Submit through the website entrypoint or directly through the GitHub issue form:
 
-- Website entry: [deepexperience.github.io/MMSkills/submit.html](https://deepexperience.github.io/MMSkills/submit.html)
-- GitHub issue form: [Submit an MMSkill package](https://github.com/DeepExperience/MMSkills/issues/new?template=skill_submission.yml)
+- Website entry: [zkangning.github.io/MMSkills_for_Visual_Agents/submit.html](https://zkangning.github.io/MMSkills_for_Visual_Agents/submit.html)
+- GitHub issue form: [Submit an MMSkill package](https://github.com/zkangning/MMSkills_for_Visual_Agents/issues/new?template=skill_submission.yml)
 - Format guide: [docs/submit_mmskills.md](docs/submit_mmskills.md)
 
 Each submission creates a GitHub issue assigned to the maintainer account, so maintainers can receive email notifications through GitHub's repository notification settings. After review, accepted packages are normalized into the MMSkills library, uploaded to the public Hugging Face dataset, and surfaced on the website Skill Library.
@@ -252,8 +252,8 @@ Any screenshot-capable VLM served through an OpenAI-compatible chat-completions 
 ### 1. Clone MMSkills
 
 ```bash
-git clone https://github.com/DeepExperience/MMSkills.git
-cd MMSkills
+git clone https://github.com/zkangning/MMSkills_for_Visual_Agents.git
+cd MMSkills_for_Visual_Agents
 ```
 
 ### 2. Install Python dependencies
@@ -297,14 +297,14 @@ MMSkills also ships a lightweight agent-product adapter under [`agent_integratio
 One-line Codex install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/DeepExperience/MMSkills/main/scripts/install_codex_mmskills.sh | bash
+curl -fsSL https://raw.githubusercontent.com/zkangning/MMSkills_for_Visual_Agents/main/scripts/install_codex_mmskills.sh | bash
 ```
 
 Direct Codex skill-installer form:
 
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo DeepExperience/MMSkills \
+  --repo zkangning/MMSkills_for_Visual_Agents \
   --path agent_integrations/mmskills-agent-adapter
 ```
 
@@ -374,7 +374,7 @@ Use `--domain all` for the full no-Google-Drive OSWorld split. The runner writes
 
 The website indexes **515 skills** from the open-source Ubuntu, macOS, VAB-Minecraft, and Mario skill assets. Each skill card links to a structured view of its `SKILL.md`, runtime state cards, and ordered visual references.
 
-Browse the live library at [deepexperience.github.io/MMSkills/skills.html](https://deepexperience.github.io/MMSkills/skills.html).
+Browse the live library at [zkangning.github.io/MMSkills_for_Visual_Agents/skills.html](https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html).
 
 The repository also includes a compact runtime-ready subset under [`skills_library/`](skills_library/) for immediate OSWorld integration.
 

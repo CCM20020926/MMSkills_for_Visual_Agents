@@ -13,7 +13,7 @@ The full public skill library is hosted on Hugging Face:
 
 - Dataset: https://huggingface.co/datasets/zhangkangning/mmskills
 - Paper page: https://huggingface.co/papers/2605.13527
-- Project website: https://deepexperience.github.io/MMSkills/skills.html
+- Project website: https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html
 
 The dataset currently exposes 515 packages across Ubuntu, macOS, VAB-Minecraft, and Mario. Do not assume all packages are installed locally. Search and download only the relevant packages when needed.
 

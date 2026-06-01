@@ -7,7 +7,7 @@ MMSkills is intended to grow as a community skill library. We welcome reusable m
 Submit a package through the GitHub issue form:
 
 ```text
-https://github.com/DeepExperience/MMSkills/issues/new?template=skill_submission.yml
+https://github.com/zkangning/MMSkills_for_Visual_Agents/issues/new?template=skill_submission.yml
 ```
 
 The project website also links to the same submission entry. Each submission opens a GitHub issue assigned to the maintainer account. GitHub sends email notifications according to the maintainer's repository notification settings, so new submissions can be reviewed before being added to the public library.

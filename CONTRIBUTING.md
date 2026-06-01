@@ -15,7 +15,7 @@ Thank you for helping improve MMSkills. This repository is intentionally compact
 Use the MMSkill submission issue form for new skill packages or new domains:
 
 ```text
-https://github.com/DeepExperience/MMSkills/issues/new?template=skill_submission.yml
+https://github.com/zkangning/MMSkills_for_Visual_Agents/issues/new?template=skill_submission.yml
 ```
 
 See [docs/submit_mmskills.md](docs/submit_mmskills.md) for the package format, review workflow, and acceptance checklist.

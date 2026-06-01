@@ -10,7 +10,7 @@ Direct install through the Codex skill installer:
 
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo DeepExperience/MMSkills \
+  --repo zkangning/MMSkills_for_Visual_Agents \
   --path agent_integrations/mmskills-agent-adapter
 ```
 
