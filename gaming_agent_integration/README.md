@@ -26,6 +26,16 @@ The public entrypoint in GamingAgent is:
 --agent_type skills
 ```
 
+## Clone GamingAgent
+
+```bash
+git clone https://github.com/lmgame-org/GamingAgent.git
+cd GamingAgent
+```
+
+Follow GamingAgent's environment setup first. The MMSkills integration only
+adds a `BaseAgent`-compatible agent class and a small runner registration patch.
+
 ## Install Into GamingAgent
 
 Run from this repository root:

@@ -11,6 +11,6 @@ parameters:
     args:
       agent_role: assistant
   return_format: "{response[choices][0][message][content]}"
-  skills_root: skills_library
+  skills_root: null
   max_skills: 6
   max_skill_chars: 9000

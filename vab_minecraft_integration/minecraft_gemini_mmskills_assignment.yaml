@@ -1,0 +1,22 @@
+import: definition.yaml
+
+definition:
+  agent:
+    gemini-minecraft-mmskills:
+      import: ../agents/gemini-minecraft-mmskills.yaml
+      parameters:
+        name: "gemini-minecraft-mmskills"
+
+concurrency:
+  task:
+    minecraft: 4
+  agent:
+    gemini-minecraft-mmskills: 4
+
+assignments:
+  - agent:
+      - gemini-minecraft-mmskills
+    task:
+      - minecraft
+
+output: "outputs/minecraft_gemini_mmskills"

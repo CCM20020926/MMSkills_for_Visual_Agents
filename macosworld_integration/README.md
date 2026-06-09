@@ -2,6 +2,8 @@
 
 This folder contains the minimal MMSkills agent files for macOSWorld.
 
+Reference project: <https://github.com/showlab/macosworld>.
+
 ## Included Files
 
 - `agent/openai_skill_v2.py`: recommended multimodal MMSkills agent.
@@ -9,6 +11,17 @@ This folder contains the minimal MMSkills agent files for macOSWorld.
 - `agent/openai_skill.py`: base MMSkills branch implementation required by the two agents above.
 - `agent/skill_loader.py`: macOSWorld skill package loader.
 - `agent/task_skill_resolver.py`: task-to-skill mapping resolver.
+
+## Clone macOSWorld
+
+```bash
+git clone https://github.com/showlab/macosworld.git
+cd macosworld
+```
+
+Follow the benchmark's environment instructions first. macOSWorld uses a local
+testbench plus macOS environments, so the MMSkills files only replace/register
+the GUI agent implementation.
 
 ## Install Into macOSWorld
 
@@ -32,6 +45,10 @@ openai-skill-text-branch
 The local macOSWorld checkout already uses these names in the synced source. If
 your checkout does not, add a `get_gui_agent.py` branch that imports
 `OpenAISkillAgentV2` or `OpenAITextSkillAgent` and passes `skills_library_dir`.
+
+The adapter keeps macOSWorld's normal action parser and VNC interaction path.
+MMSkills is used only inside the agent as branch-loaded procedural guidance and
+state/reference evidence.
 
 ## Run
 

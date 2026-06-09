@@ -1,0 +1,17 @@
+module: src.client.agents.gemini_minecraft_skills_agent.GeminiMinecraftSkillsAgent
+parameters:
+  model: gemini-3-flash-preview
+  skills_library_dir: null
+  task_skill_mapping_path: null
+  skill_mode: multimodal
+  max_skill_chars: 10000
+  max_skill_consults_per_skill: 2
+  max_skill_consults_per_step: 1
+  max_state_view_selection_rounds: 2
+  max_stage1_selected_states: 2
+  max_stage1_selected_views: 4
+  max_planner_rounds: 3
+  active_memo_ttl_steps: 5
+  save_skill_logs: true
+  min_task_skills: 1
+  max_task_skills: 5

@@ -262,7 +262,7 @@ minimal agent files it needs:
 - [`osworld_integration/`](osworld_integration/): `--agent_type mm_skill`.
 - [`macosworld_integration/`](macosworld_integration/): `openai-skill-v2-mm-branch` and `openai-skill-text-branch`.
 - [`gaming_agent_integration/`](gaming_agent_integration/): GamingAgent `--agent_type skills`.
-- [`vab_minecraft_integration/`](vab_minecraft_integration/): VAB `MMSkillsHTTPAgent` wrapper for Minecraft tasks.
+- [`vab_minecraft_integration/`](vab_minecraft_integration/): VAB-Minecraft HTTP wrapper plus Gemini multimodal skill agent.
 
 Each folder contains a README with copy/install commands for the corresponding
 benchmark checkout.
