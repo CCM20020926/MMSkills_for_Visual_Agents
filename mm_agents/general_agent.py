@@ -2,7 +2,7 @@
 General desktop VLM agent for OSWorld.
 
 The agent uses a model-agnostic "return Python code" interaction style, but
-borrows a few robustness ideas from Qwen3VLAgent:
+keeps a few robustness features that help screenshot-based agents:
 - image preprocessing via smart_resize
 - richer instruction text with explicit screen resolution / history
 - optional relative-coordinate output that is scaled back to the real screen
@@ -39,8 +39,8 @@ def encode_image(image_content: bytes) -> str:
 
 def process_image(image_bytes: bytes) -> Tuple[str, int, int]:
     """
-    Resize screenshots using the same heuristic as Qwen3VLAgent so the model sees
-    a similar visual input distribution during evaluation.
+    Resize screenshots with the shared VLM preprocessing helper so compatible
+    models receive a stable visual input distribution during evaluation.
     """
     return preprocess_image_for_vlm(image_bytes)
 
@@ -711,9 +711,8 @@ class GeneralAgent:
 
     def _build_openai_extra_body(self) -> dict | None:
         """
-        Some OpenAI-compatible providers require provider-specific controls.
-        Qwen3-VL uses `enable_thinking` in `extra_body`, as verified in
-        test_qwen3vl.py.
+        Some OpenAI-compatible providers require provider-specific controls for
+        reasoning/thinking mode.
         """
         if not self._is_qwen_openai_backend():
             return None

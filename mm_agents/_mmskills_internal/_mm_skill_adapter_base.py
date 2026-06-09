@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from mm_agents import general_agent as base_agent_mod
-from mm_agents import _mm_skill_state_cards as v4mod
-from mm_agents import _mm_skill_long_plan as v6mod
+from mm_agents._mmskills_internal import _mm_skill_state_cards as v4mod
+from mm_agents._mmskills_internal import _mm_skill_long_plan as v6mod
 
 
 ARCHITECTURE_VERSION = "mm_skill_expiring_active_memo_sanitized_history"

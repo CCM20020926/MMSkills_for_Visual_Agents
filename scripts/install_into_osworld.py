@@ -11,18 +11,15 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 AGENT_FILES = [
+    "agent.py",
     "general_agent.py",
     "general_skill_agent.py",
     "general_text_skill_agent.py",
-    "_mm_skill_base.py",
-    "_mm_skill_planner.py",
-    "_mm_skill_state_cards.py",
-    "_mm_skill_long_plan.py",
-    "_mm_skill_adapter_base.py",
     "mm_skill_agent.py",
     "skill_loader.py",
     "task_skill_resolver.py",
 ]
+INTERNAL_AGENT_DIRS = ["_mmskills_internal"]
 
 RUNNER_FILES = [
     "run.py",
@@ -65,6 +62,8 @@ def main() -> None:
 
     for filename in AGENT_FILES:
         copy_file(REPO_ROOT / "mm_agents" / filename, osworld_root / "mm_agents" / filename)
+    for dirname in INTERNAL_AGENT_DIRS:
+        copy_tree(REPO_ROOT / "mm_agents" / dirname, osworld_root / "mm_agents" / dirname)
     copy_file(
         REPO_ROOT / "mm_agents" / "utils" / "qwen_vl_utils.py",
         osworld_root / "mm_agents" / "utils" / "qwen_vl_utils.py",

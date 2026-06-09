@@ -1,0 +1,16 @@
+module: src.client.agents.mmskills_http_agent.MMSkillsHTTPAgent
+parameters:
+  url: https://api.openai.com/v1/chat/completions
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer <% PUT-YOUR-OPENAI-KEY-HERE %>
+  body:
+    temperature: 0
+  prompter:
+    name: role_content_dict
+    args:
+      agent_role: assistant
+  return_format: "{response[choices][0][message][content]}"
+  skills_root: skills_library
+  max_skills: 6
+  max_skill_chars: 9000

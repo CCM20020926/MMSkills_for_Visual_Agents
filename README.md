@@ -218,10 +218,13 @@ Each submission creates a GitHub issue assigned to the maintainer account, so ma
 ```text
 MMSkills/
 ├── agent_integrations/        # Codex/OpenClaw/Claude Code agent adapters and download helpers
-├── mm_agents/                 # MMSkill runtime architecture and model adapters
+├── gaming_agent_integration/  # Minimal GamingAgent/Lmgame-Bench SkillsAgent adapter
+├── macosworld_integration/    # Minimal macOSWorld MMSkills agent files
+├── mm_agents/                 # Public OSWorld agent adapters and MMSkill runtime
 ├── osworld_integration/       # MMSkills-aware OSWorld runner files
 ├── skills_library/            # Public multimodal skills subset for direct runtime use
 ├── task_skill_mappings/       # OSWorld task-to-skill mapping for released skills
+├── vab_minecraft_integration/ # Minimal VAB-Minecraft HTTPAgent adapter
 └── scripts/
     ├── install_into_osworld.py # Install this release into an OSWorld checkout
     └── sync_from_sources.py    # Maintainer sync helper for source checkouts
@@ -237,15 +240,32 @@ The public runtime entrypoint is [`mm_agents/mm_skill_agent.py`](mm_agents/mm_sk
 
 The architecture is model-agnostic. A main visual agent receives compact skill hints; when a skill may apply, the runtime opens a branch that decides whether visual evidence is needed, requests relevant state views, compares them with the live screenshot, and returns structured guidance for the next grounded action.
 
+Historical MMSkills implementation layers live under `mm_agents/_mmskills_internal/`. They are private support modules for `MMSkillAgent`, not separate agent choices. Use `--agent_type mm_skill` for the multimodal MMSkills runtime.
+
 The reference integration supports:
 
 - `mm_skill`: multimodal branch-loaded skill consultation.
 - `general_text_skill`: text-only skill consultation for ablation and lightweight runs.
+- `general_skill`: inline skill-context ablation for legacy comparisons.
 - `general`: baseline model-agnostic screenshot-to-pyautogui visual-agent routing.
 
 Legacy `gemini`, `gemini_skill`, and `gemini_text_skill` CLI names are still accepted by the runner as aliases for compatibility, but the public files and recommended commands use the model-agnostic `general*` names.
 
 Any screenshot-capable VLM served through an OpenAI-compatible chat-completions API can use the same `general*` and `mm_skill` interfaces by setting `--model`, `--api_model` when needed, `--base_url`, and `--api_key`.
+
+## 🧩 Benchmark Integrations
+
+OSWorld is the reference runtime in this repository. Additional benchmark
+adapters are kept in separate folders so each benchmark only receives the
+minimal agent files it needs:
+
+- [`osworld_integration/`](osworld_integration/): `--agent_type mm_skill`.
+- [`macosworld_integration/`](macosworld_integration/): `openai-skill-v2-mm-branch` and `openai-skill-text-branch`.
+- [`gaming_agent_integration/`](gaming_agent_integration/): GamingAgent `--agent_type skills`.
+- [`vab_minecraft_integration/`](vab_minecraft_integration/): VAB `MMSkillsHTTPAgent` wrapper for Minecraft tasks.
+
+Each folder contains a README with copy/install commands for the corresponding
+benchmark checkout.
 
 ## 🔧 Installation
 

@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from PIL import Image
 
-from mm_agents import _mm_skill_base as v2mod
+from mm_agents._mmskills_internal import _mm_skill_base as v2mod
 
 
 MAX_SKILL_CONSULTS_PER_SKILL = 2

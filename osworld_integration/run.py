@@ -14,9 +14,6 @@ from tqdm import tqdm
 import lib_run_single
 from desktop_env.desktop_env import DesktopEnv
 from mm_agents.agent import PromptAgent
-from mm_agents.qwen3vl_agent import Qwen3VLAgent
-from mm_agents.qwen3vl_skill_agent import Qwen3VLSkillAgent
-from mm_agents.qwen3vl_skill_agent_v2 import Qwen3VLSkillAgentV2
 from mm_agents.general_agent import GeneralAgent
 from mm_agents.general_skill_agent import GeneralSkillAgent
 from mm_agents.general_text_skill_agent import (
@@ -127,9 +124,6 @@ def config() -> argparse.Namespace:
         default="prompt",
         choices=[
             "prompt",
-            "qwen3vl",
-            "qwen3vl_skill",
-            "qwen3vl_skill_v2",
             "general",
             "general_skill",
             "general_text_skill",
@@ -175,7 +169,7 @@ def config() -> argparse.Namespace:
         type=str,
         default="relative",
         choices=["absolute", "relative"],
-        help="Coordinate system for Qwen3VL agent (absolute or relative)",
+        help="Coordinate system for generated pyautogui coordinates.",
     )
     # Reasoning/thinking config for compatible backends
     parser.add_argument(
@@ -332,64 +326,8 @@ def test(args: argparse.Namespace, test_all_meta: dict) -> None:
         "result_dir": args.result_dir,
     }
 
-    # Initialize agent based on agent_type
-    if args.agent_type == "qwen3vl":
-        agent = Qwen3VLAgent(
-            model=args.model,
-            max_tokens=args.max_tokens,
-            top_p=args.top_p,
-            temperature=args.temperature,
-            action_space=args.action_space,
-            observation_type=args.observation_type,
-            coordinate_type=args.coordinate_type,
-            api_backend=args.api_backend,
-            base_url=args.base_url,
-            api_key=args.api_key,
-            client_password=getattr(args, "client_password", ""),
-            enable_skills=args.enable_skills,
-            skill_mode=args.skill_mode,
-            skills_library_dir=args.skills_library_dir,
-            save_conversation_json=args.save_conversation_json,
-        )
-    elif args.agent_type == "qwen3vl_skill":
-        agent = Qwen3VLSkillAgent(
-            model=args.model,
-            max_tokens=args.max_tokens,
-            top_p=args.top_p,
-            temperature=args.temperature,
-            action_space=args.action_space,
-            observation_type=args.observation_type,
-            coordinate_type=args.coordinate_type,
-            api_backend=args.api_backend,
-            base_url=args.base_url,
-            api_key=args.api_key,
-            client_password=getattr(args, "client_password", ""),
-            enable_skills=args.enable_skills,
-            skill_mode=args.skill_mode,
-            skills_library_dir=args.skills_library_dir,
-            save_conversation_json=args.save_conversation_json,
-        )
-    elif args.agent_type == "qwen3vl_skill_v2":
-        agent = Qwen3VLSkillAgentV2(
-            model=args.model,
-            max_tokens=args.max_tokens,
-            top_p=args.top_p,
-            temperature=args.temperature,
-            action_space=args.action_space,
-            observation_type=args.observation_type,
-            coordinate_type=args.coordinate_type,
-            api_backend=args.api_backend,
-            api_model=args.api_model,
-            enable_thinking=args.enable_thinking,
-            base_url=args.base_url,
-            api_key=args.api_key,
-            client_password=getattr(args, "client_password", ""),
-            enable_skills=args.enable_skills,
-            skill_mode=args.skill_mode,
-            skills_library_dir=args.skills_library_dir,
-            save_conversation_json=args.save_conversation_json,
-        )
-    elif args.agent_type == "general":
+    # Initialize agent based on the public release surface.
+    if args.agent_type == "general":
         agent = GeneralAgent(
             model=args.model,
             max_tokens=args.max_tokens,

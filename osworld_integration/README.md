@@ -8,7 +8,7 @@ This directory contains the MMSkills-aware runner files that can be copied into 
 
 They add:
 
-- the `general`, `general_text_skill`, and `mm_skill` agent paths,
+- the `general`, `general_skill`, `general_text_skill`, and `mm_skill` agent paths,
 - task-to-skill resolution,
 - per-task skill invocation logs,
 - skill usage summaries,
@@ -21,3 +21,5 @@ python3 scripts/install_into_osworld.py /path/to/OSWorld --with-runner --with-sk
 ```
 
 Use `--with-runner` when you want to replace OSWorld runner files with the MMSkills-aware versions. Use `--with-skills` when you also want to copy the released skill subset and task mappings into the OSWorld checkout.
+
+The recommended MMSkills runtime is `--agent_type mm_skill`. The private historical implementation layers are installed under `OSWorld/mm_agents/_mmskills_internal/` only to support that public entrypoint.

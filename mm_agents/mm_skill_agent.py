@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from mm_agents import _mm_skill_adapter_base as _adapter_base
+from mm_agents._mmskills_internal import _mm_skill_adapter_base as _adapter_base
 
 
 ARCHITECTURE_VERSION = "mm_skill_branch_loaded_gated_views"

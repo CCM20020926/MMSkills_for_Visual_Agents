@@ -13,18 +13,22 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 AGENT_FILES = [
+    "agent.py",
     "general_agent.py",
     "general_skill_agent.py",
     "general_text_skill_agent.py",
+    "mm_skill_agent.py",
+    "skill_loader.py",
+    "task_skill_resolver.py",
+]
+INTERNAL_AGENT_FILES = [
     "_mm_skill_base.py",
     "_mm_skill_planner.py",
     "_mm_skill_state_cards.py",
     "_mm_skill_long_plan.py",
     "_mm_skill_adapter_base.py",
-    "mm_skill_agent.py",
-    "skill_loader.py",
-    "task_skill_resolver.py",
 ]
+INTERNAL_AGENT_DIR = "_mmskills_internal"
 
 OSWORLD_INTEGRATION_FILES = [
     "run.py",
@@ -80,13 +84,54 @@ def sync_agents(osworld_root: Path) -> None:
     mm_agents_src = osworld_root / "mm_agents"
     for filename in AGENT_FILES:
         copy_file(mm_agents_src / filename, REPO_ROOT / "mm_agents" / filename)
+    internal_src = mm_agents_src / INTERNAL_AGENT_DIR
+    internal_dst = REPO_ROOT / "mm_agents" / INTERNAL_AGENT_DIR
+    if internal_src.exists():
+        copy_tree(internal_src, internal_dst)
+    else:
+        internal_dst.mkdir(parents=True, exist_ok=True)
+        for filename in INTERNAL_AGENT_FILES:
+            copy_file(mm_agents_src / filename, internal_dst / filename)
+        (internal_dst / "__init__.py").write_text(
+            '"""Private implementation layers for the public MMSkillAgent runtime."""\n',
+            encoding="utf-8",
+        )
     copy_file(
         mm_agents_src / "utils" / "qwen_vl_utils.py",
         REPO_ROOT / "mm_agents" / "utils" / "qwen_vl_utils.py",
     )
     for filename in OSWORLD_INTEGRATION_FILES:
         copy_file(osworld_root / filename, REPO_ROOT / "osworld_integration" / filename)
+    patch_internal_imports()
     patch_global_mapping_resolver()
+
+
+def patch_internal_imports() -> None:
+    """Keep the released internal package layout after syncing legacy sources."""
+    replacements = {
+        "from mm_agents import _mm_skill_base as v2mod": (
+            "from mm_agents._mmskills_internal import _mm_skill_base as v2mod"
+        ),
+        "from mm_agents import _mm_skill_planner as v3mod": (
+            "from mm_agents._mmskills_internal import _mm_skill_planner as v3mod"
+        ),
+        "from mm_agents import _mm_skill_state_cards as v4mod": (
+            "from mm_agents._mmskills_internal import _mm_skill_state_cards as v4mod"
+        ),
+        "from mm_agents import _mm_skill_long_plan as v6mod": (
+            "from mm_agents._mmskills_internal import _mm_skill_long_plan as v6mod"
+        ),
+        "from mm_agents import _mm_skill_adapter_base as _adapter_base": (
+            "from mm_agents._mmskills_internal import _mm_skill_adapter_base as _adapter_base"
+        ),
+    }
+    paths = [REPO_ROOT / "mm_agents" / "mm_skill_agent.py"]
+    paths.extend((REPO_ROOT / "mm_agents" / INTERNAL_AGENT_DIR).glob("*.py"))
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+        path.write_text(text, encoding="utf-8")
 
 
 def patch_global_mapping_resolver() -> None:
@@ -196,7 +241,10 @@ def main() -> None:
     sync_agents(args.osworld_root.expanduser())
     selected_basenames = sync_skills(args.skills_source_root.expanduser())
     generate_global_mapping(args.skills_source_root.expanduser(), selected_basenames)
-    print(f"Synchronized {len(AGENT_FILES)} agent files and {len(SELECTED_SKILLS)} skills.")
+    print(
+        f"Synchronized {len(AGENT_FILES)} public agent files, "
+        f"{len(INTERNAL_AGENT_FILES)} internal MMSkills files, and {len(SELECTED_SKILLS)} skills."
+    )
 
 
 if __name__ == "__main__":

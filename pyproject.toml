@@ -30,4 +30,4 @@ Issues = "https://github.com/zkangning/MMSkills_for_Visual_Agents/issues"
 Paper = "https://arxiv.org/abs/2605.13527"
 
 [tool.setuptools]
-packages = ["mm_agents", "mm_agents.utils"]
+packages = ["mm_agents", "mm_agents._mmskills_internal", "mm_agents.utils"]

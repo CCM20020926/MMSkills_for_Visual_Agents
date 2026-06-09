@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from mm_agents import _mm_skill_planner as v3mod
+from mm_agents._mmskills_internal import _mm_skill_planner as v3mod
 
 
 ARCHITECTURE_VERSION = "mm_skill_state_cards_selective_images"
