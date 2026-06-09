@@ -1,0 +1,25 @@
+import: definition.yaml
+
+definition:
+  agent:
+    mmskills-gpt-4o:
+      import: ../agents/openai-chat-mmskills.yaml
+      parameters:
+        name: "mmskills-gpt-4o"
+        body:
+          model: "gpt-4o-2024-05-13"
+          max_tokens: 512
+
+concurrency:
+  task:
+    minecraft: 4
+  agent:
+    mmskills-gpt-4o: 4
+
+assignments:
+  - agent:
+      - mmskills-gpt-4o
+    task:
+      - minecraft
+
+output: "outputs/minecraft_mmskills"

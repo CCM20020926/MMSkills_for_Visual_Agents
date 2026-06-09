@@ -1,0 +1,86 @@
+diff --git a/gamingagent/agents/__init__.py b/gamingagent/agents/__init__.py
+index 03daf07..6897652 100644
+--- a/gamingagent/agents/__init__.py
++++ b/gamingagent/agents/__init__.py
+@@ -1,3 +1,4 @@
+ from .base_agent import BaseAgent
++from .skills_agent import SkillsAgent
+ 
+-__all__ = ['BaseAgent']
++__all__ = ['BaseAgent', 'SkillsAgent']
+diff --git a/lmgame-bench/single_agent_runner.py b/lmgame-bench/single_agent_runner.py
+index d5b0516..72dc47d 100644
+--- a/lmgame-bench/single_agent_runner.py
++++ b/lmgame-bench/single_agent_runner.py
+@@ -18,6 +18,7 @@ import retro
+ from retro.enums import Actions, Observations, State # retro.data will be used directly for Integrations
+ 
+ from gamingagent.agents.base_agent import BaseAgent
++from gamingagent.agents.skills_agent import SkillsAgent
+ from gamingagent.modules import PerceptionModule, ReasoningModule # Observation is imported by Env
+ from tools.utils import draw_grid_on_image
+ # Directly import the specific environment we are using
+@@ -68,8 +69,23 @@ def parse_arguments(defaults_map=None, argv_to_parse=None):
+                         help="Root directory for agent configurations.")
+     parser.add_argument("--model_name", type=str, default="claude-3-5-sonnet-latest",
+                         help="Name of the model for the agent.")
++    parser.add_argument("--agent_type", type=str, default="base", choices=["base", "skills"],
++                        help="Agent architecture to run. Use 'skills' for branch-loaded multimodal skills.")
++    parser.add_argument("--skills_root", type=str, default=None,
++                        help="Root directory containing generated multimodal skills. Defaults to LMGAME_SKILLS_ROOT or latest runs/lmgame_multimodal_skills/*/phase4/skills.")
++    parser.add_argument("--skill_names", type=str, default=None,
++                        help="Optional comma-separated exact skill names to expose to SkillsAgent.")
++    parser.add_argument("--skill_cooldown_steps", type=int, default=5,
++                        help="Minimum number of environment steps between skill branch loads.")
++    parser.add_argument("--max_stage1_selected_states", type=int, default=2,
++                        help="Maximum state cards Stage 1 may request in one skill branch.")
++    parser.add_argument("--max_stage1_selected_views", type=int, default=4,
++                        help="Maximum total before/full_frame/after views Stage 1 may request in one skill branch.")
+     parser.add_argument("--harness", action="store_true",
+                         help="Use perception-memory-reasoning pipeline (harness mode). Default is False.")
++    parser.add_argument("--no_harness", "--no-harness", dest="harness", action="store_false",
++                        help="Disable perception-memory-reasoning pipeline and use the base module.")
++    parser.set_defaults(harness=False)
+     parser.add_argument("--multiagent_arg", type=str, default="single",
+                         choices=["single", "multi"], help="Multi-agent mode configuration.")
+     parser.add_argument("--num_runs", type=int, default=1, help="Number of game episodes.")
+@@ -813,7 +829,20 @@ def main():
+             print(f"Warning: Could not parse scaffolding '{args.scaffolding}': {e}. Using None.")
+ 
+     # --- Then Create Agent, passing the environment ---
+-    agent = BaseAgent(
++    agent_cls = SkillsAgent if args.agent_type == "skills" else BaseAgent
++    agent_kwargs = {}
++    if args.agent_type == "skills":
++        agent_kwargs.update(
++            {
++                "skills_root": args.skills_root,
++                "skill_names": args.skill_names,
++                "skill_cooldown_steps": args.skill_cooldown_steps,
++                "max_stage1_selected_states": args.max_stage1_selected_states,
++                "max_stage1_selected_views": args.max_stage1_selected_views,
++            }
++        )
++
++    agent = agent_cls(
+         game_name=args.game_name,
+         model_name=args.model_name,
+         config_path=agent_prompts_config_path,
+@@ -830,6 +859,7 @@ def main():
+         vllm_url=args.vllm_url,
+         modal_url=args.modal_url,
+         token_limit=args.token_limit,
++        **agent_kwargs,
+     )
+     
+     # runner_log_dir = agent.cache_dir # Agent already sets its cache_dir, this can be removed or used for verification
+@@ -879,7 +909,8 @@ def main():
+             print("[Runner] AceAttorneyEnv instance does not have calculate_final_performance_score method.")
+ 
+     print("\n" + "="*30 + " Overall Summary " + "="*30)
+-    print(f"Game: {args.game_name}, Model: {args.model_name}, Mode: {'Harness' if args.harness else 'BaseOnly'}, ObsMode: {args.observation_mode}")
++    mode_name = "Harness" if args.harness else ("SkillsAgent" if args.agent_type == "skills" else "BaseOnly")
++    print(f"Game: {args.game_name}, Model: {args.model_name}, Mode: {mode_name}, ObsMode: {args.observation_mode}")
+     print(f"Number of runs: {args.num_runs}")
+     
+     if args.num_runs > 0 and overall_stat_summary:
