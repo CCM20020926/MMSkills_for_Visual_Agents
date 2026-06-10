@@ -40,6 +40,7 @@
 
 ## 📣 Latest News
 
+- 🚀 **[June 2026]** We further released MMSkills benchmark adapters for [macOSWorld](macosworld_integration/), [VAB-Minecraft](vab_minecraft_integration/), and [GamingAgent](gaming_agent_integration/), making it easier to evaluate skill-augmented agents beyond OSWorld.
 - 🏆 **[May 2026]** MMSkills ranked **#1 on Hugging Face Daily Papers** on **2026.5.18**.
 - 🤗 **[May 2026]** The MMSkills dataset is now available on [Hugging Face Datasets](https://huggingface.co/datasets/zhangkangning/mmskills); the paper page is also available on [Hugging Face Papers](https://huggingface.co/papers/2605.13527).
 - 🌐 **[May 2026]** The project website is live with [demo comparisons](https://zkangning.github.io/MMSkills_for_Visual_Agents/cases.html) and a searchable [MMSkills Library](https://zkangning.github.io/MMSkills_for_Visual_Agents/skills.html) indexing **515 skills** across Ubuntu, macOS, VAB-Minecraft, and Mario.
