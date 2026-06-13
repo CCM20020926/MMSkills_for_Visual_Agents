@@ -38,6 +38,28 @@ Current converted coverage:
 - 437 task-skill assignments.
 - 170 unique referenced public skills.
 
+Per-domain task-ID coverage in this compact file:
+
+| Domain | Mapped task IDs |
+| --- | ---: |
+| chrome | 45 |
+| gimp | 26 |
+| libreoffice_calc | 47 |
+| libreoffice_impress | 47 |
+| libreoffice_writer | 23 |
+| multi_apps | 93 |
+| os | 24 |
+| thunderbird | 15 |
+| vlc | 17 |
+| vs_code | 23 |
+
+For Chrome specifically, OSWorld's raw `evaluation_examples/examples/chrome/`
+directory can contain 46 task JSON files, while the no-Google-Drive split used
+by the README evaluation commands (`evaluation_examples/test_nogdrive.json`)
+contains 45 Chrome tasks. This mapping covers all 45 Chrome tasks in that split.
+The raw task `06fe7178-4491-4589-810f-2e2bc9502122` is intentionally absent
+because it is not part of `test_nogdrive.json`.
+
 The mapping may reference skills that are not present in the small local
 `skills_library/` subset. For full coverage, download the corresponding packages
 from the Hugging Face dataset or use the MMSkills Agent Adapter for on-demand
