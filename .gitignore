@@ -27,6 +27,7 @@ cases.html
 skills.html
 assets/
 
+.vscode/
 skills_library/
 skills_library(old)/
 OSWorld/
