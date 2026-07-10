@@ -70,3 +70,26 @@ class AgentNetLoader:
         if len(current_segment) >= min_segment_len:
             success_segments.append((traj.task_id, current_segment))
         return success_segments, failed_steps
+    
+    @staticmethod
+    def extract_failure_contexts(
+        traj: Trajectory,
+        window_size: int = 1
+    ) -> List[Dict]:
+        """
+        提取轨迹中所有失败步骤及其上下文窗口。
+        返回: list of dict，每个包含 task_id, failed_step, context_steps, step_index
+        """
+        contexts = []
+        for i, step in enumerate(traj.steps):
+            if not step.correct:
+                start = max(0, i - window_size)
+                end = min(len(traj.steps), i + window_size + 1)
+                context_steps = traj.steps[start:end]
+                contexts.append({
+                    'task_id': traj.task_id,
+                    'failed_step': step,
+                    'context': context_steps,
+                    'step_index': i
+                })
+        return contexts
