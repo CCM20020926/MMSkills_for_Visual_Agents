@@ -10,46 +10,48 @@ class SkillMerger:
     def merge(self, plans):
         """
         合并同一 domain 下的多个规划结果（ClusterPlan）。
-        假定所有 plans 都属于同一个 domain。
-        返回: 合并后的技能列表，每个技能包含 common_failure_modes
+        每个技能将携带其专属的 common_failure_modes。
         """
         if not plans:
             return []
 
-        # 收集所有候选技能和失败模式
-        all_skill_candidates = []
-        all_failure_patterns = []
+        # 准备候选技能数据，每个技能绑定其来源簇的失败模式
+        candidates_with_failures = []
         for plan in plans:
-            all_skill_candidates.extend(plan.get('skills', []))
-            all_failure_patterns.extend(plan.get('failure_patterns', []))
+            for skill in plan.get('skills', []):
+                candidates_with_failures.append({
+                    "skill": skill,
+                    "failure_patterns": plan.get('failure_patterns', [])
+                })
 
-        if not all_skill_candidates:
+        if not candidates_with_failures:
             return []
 
-        # 合并技能（去重+泛化）
-        merged_skills = self._merge_skills(all_skill_candidates)
-
-        # 泛化失败模式
-        failure_modes = self._generalize_failures(all_failure_patterns)
-
-        # 为每个技能添加失败模式
-        for skill in merged_skills:
-            skill['common_failure_modes'] = failure_modes
-
+        # 调用 LLM 进行合并，输出每个技能专属的 common_failure_modes
+        merged_skills = self._merge_skills(candidates_with_failures)
         return merged_skills
 
-    def _merge_skills(self, candidates):
-        """使用 LLM 合并候选技能"""
-        if not candidates:
+    def _merge_skills(self, candidates_with_failures):
+        if not candidates_with_failures:
             return []
+        
         prompt = ChatPromptTemplate.from_template("""
 You are a skill merger. Merge the following skill candidates into a set of unique, generalized skills.
-Each skill should have: skill_name, description, workflow_boundary (a concise textual description summarizing the whole workflow), completion_criteria, covered_task_ids (union of all covered_task_ids from the candidates).
+Each candidate includes a "skill" object and its associated "failure_patterns".
+
+For each merged skill, you MUST derive a **unique** list of "common_failure_modes" 
+based ONLY on the failure patterns of the skills that are merged into it.
+DO NOT copy failure modes from unrelated skills.
+
+The output skill must contain: 
+skill_name, description, workflow_boundary, completion_criteria, covered_task_ids, common_failure_modes.
+
 Candidates: {candidates}
-Return a JSON array of merged skills.
+
+Return a JSON array of merged skills (each with a dedicated common_failure_modes field).
 """)
         response = self.llm.invoke(prompt.format_messages(
-            candidates=json.dumps(candidates, indent=2)
+            candidates=json.dumps(candidates_with_failures, indent=2)
         ))
         merged = json.loads(response.content) if hasattr(response, 'content') else response
 
@@ -58,18 +60,3 @@ Return a JSON array of merged skills.
         threshold = self.config.get('coverage_ratio_threshold', 0.6)
         filtered = [s for s in merged if len(s.get('covered_task_ids', [])) / max(1, total_tasks) <= threshold]
         return filtered
-
-    def _generalize_failures(self, failure_patterns):
-        """泛化失败模式为通用列表"""
-        if not failure_patterns:
-            return []
-        prompt = ChatPromptTemplate.from_template("""
-You are given many specific failure patterns. Generalize them into a concise list of common failure modes.
-Failure patterns:
-{failure_patterns}
-Return a JSON list of strings.
-""")
-        response = self.llm.invoke(prompt.format_messages(
-            failure_patterns=json.dumps(failure_patterns, indent=2)
-        ))
-        return json.loads(response.content) if hasattr(response, 'content') else response
