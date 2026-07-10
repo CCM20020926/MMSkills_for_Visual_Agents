@@ -10,7 +10,7 @@ class Clusterer:
         self.kmeans = KMeans(n_clusters=n_clusters, random_state=42)
 
     def fit_predict(self, trajs: List[Trajectory]):
-        # 将 domain 作为前缀，强化领域一致性（这里 domain 已确保相同）
+        # 将 domain 作为前缀，强化领域一致性（这里 domain 已确保相同），使用 KMeans 方法进行语义聚类
         texts = [f"[{t.domain}] {t.instruction}" for t in trajs]
         embeddings = self.encoder.encode(texts)
         
