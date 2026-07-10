@@ -15,7 +15,6 @@ class AgentNetLoader:
         """
         trajs_data = {}
         
-        # 读取过程代码需要修改（2026/7/10）
         with open(self.data_path, 'r') as f:
             for line in f:
                 item = json.loads(line)
@@ -27,7 +26,7 @@ class AgentNetLoader:
                         observation=value.get('observation', ''),
                         action=value.get('action', ''),
                         code=value.get('code', ''),
-                        correct=value.get('last_step_correct', True),  # 映射字段
+                        correct=value.get('last_step_correct', None),  # 映射字段
                         reflection=value.get('reflection', '')
                     )
                     steps.append(step)
