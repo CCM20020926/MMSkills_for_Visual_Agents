@@ -28,13 +28,19 @@ class Pipeline:
     def run(self):
         # 1. 加载数据（按 domain 聚合）
         trajs_data = self.loader.load()
-        all_trajs = [traj for domain_trajs in trajs_data.values() for traj in domain_trajs]
+        all_trajs = [traj for traj in trajs_data.values()]
 
         # 2. 收集全局失败步骤（用于负向约束）
-        failure_pool = []
+        failure_steps_with_context = []   # 存储所有与失败相关的步骤（含上下文）
+        seen = set()
         for traj in all_trajs:
-            _, fails = AgentNetLoader.split_by_success_with_id(traj)
-            failure_pool.extend([s for _, s in fails])
+            contexts = AgentNetLoader.extract_failure_contexts(traj, window_size=1)
+            for ctx in contexts:
+                for step in ctx['context']:
+                    key = (step.image, step.action)   # 简单去重依据
+                    if key not in seen:
+                        seen.add(key)
+                        failure_steps_with_context.append(step)
 
         # 3. 对每个 domain 分别聚类、规划  <--- 核心改动
         domain_plans = {}  # domain -> list of plans
@@ -71,8 +77,9 @@ class Pipeline:
             rep_traj = self._select_representative_trajectory(skill, all_trajs)
             if rep_traj is None:
                 continue
+                
             domain = rep_traj.domain
-
+            
             success_segments, _ = AgentNetLoader.split_by_success_with_id(rep_traj)
             if not success_segments:
                 continue
@@ -80,16 +87,22 @@ class Pipeline:
 
             plan = self.drafter.draft_plan(skill, domain)
 
-            grounder = ImageGrounder(self.detector, str(self.output_dir), failure_pool)
+            grounder = ImageGrounder(self.detector, str(self.output_dir), failure_steps_with_context)
             plan = grounder.ground_plan(plan, best_segment)
 
-            # 收集该技能相关的失败步骤
+            # [CHANGED] 收集该技能相关的失败步骤（同样使用上下文）
             skill_failures = []
+            seen_skill = set()
             covered_ids = skill.get('covered_task_ids', [])
             for traj in all_trajs:
                 if traj.task_id in covered_ids:
-                    _, fails = AgentNetLoader.split_by_success_with_id(traj)
-                    skill_failures.extend([s for _, s in fails])
+                    contexts = AgentNetLoader.extract_failure_contexts(traj, window_size=1)
+                    for ctx in contexts:
+                        for step in ctx['context']:
+                            key = (step.image, step.action)
+                            if key not in seen_skill:
+                                seen_skill.add(key)
+                                skill_failures.append(step)
 
             cards = grounder.generate_runtime_cards(plan, domain, skill_failures)
 
@@ -100,15 +113,16 @@ class Pipeline:
                 if src_images.exists():
                     src_images.rename(skill_dir / "Images")
                 with open(skill_dir / "plan.json", 'w') as f:
-                    json.dump(plan.model_dump(), f, indent=2)
+                    json.dump(plan.dict(), f, indent=2)
                 with open(skill_dir / "runtime_state_cards.json", 'w') as f:
-                    json.dump(cards.model_dump(), f, indent=2)
+                    json.dump(cards.dict(), f, indent=2)
                 markdown = self.drafter.draft_markdown(plan)
                 with open(skill_dir / "SKILL.md", 'w') as f:
                     f.write(markdown)
                 print(f"Generated skill: {plan.skill_slug} (domain: {domain})")
             else:
                 print(f"Audit failed for {plan.skill_slug}, skipping.")
+        
 
     def _select_representative_trajectory(self, skill, all_trajs):
         covered_ids = skill.get('covered_task_ids', [])
