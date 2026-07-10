@@ -1,0 +1,10 @@
+llm_model: "gpt-4o-mini"
+n_clusters: 20
+coverage_ratio_threshold: 0.6
+min_workflow_steps: 3
+detector_type: "grounding_dino"
+grounding_dino_model: "IDEA-Research/grounding-dino-tiny"
+output_dir: "./output_skills"
+data_path: "./agentnet_data/train.jsonl"
+image_root: "./agentnet_images"
+# !!! 将以上参数替换为实际值
