@@ -123,7 +123,7 @@ class Pipeline:
             else:
                 print(f"Audit failed for {plan.skill_slug}, skipping.")
 
-    def _select_best_trajectory(self, skill, all_trajs):
+    def _select_representative_trajectory(self, skill, all_trajs):
         covered_ids = skill.get('covered_task_ids', [])
         candidates = [traj for traj in all_trajs if traj.task_id in covered_ids]
         if not candidates:
