@@ -26,7 +26,7 @@ class AgentNetLoader:
                         observation=value.get('observation', ''),
                         action=value.get('action', ''),
                         code=value.get('code', ''),
-                        correct=value.get('last_step_correct', None),  # 映射字段
+                        correct=value.get('last_step_correct'),  # 映射字段
                         reflection=value.get('reflection', '')
                     )
                     steps.append(step)
@@ -35,7 +35,10 @@ class AgentNetLoader:
                     task_id=item.get('task_id', ''),
                     instruction=item.get('instruction', ''),
                     domain=item.get('domain', 'unknown'),
-                    task_completed=item.get('task_completed', False),
+                    task_completed=item.get('task_completed'),
+                    task_difficulty=item.get('task_difficulty'),
+                    alignment_score=item.get('alignment_score'),
+                    efficiency_score=item.get('efficiency_score'),
                     steps=steps
                 )
                 

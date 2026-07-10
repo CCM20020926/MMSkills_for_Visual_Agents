@@ -14,6 +14,8 @@ results/
 run_log/
 *.log
 
+.idea/
+
 recording.mp4
 traj.jsonl
 conversation.json

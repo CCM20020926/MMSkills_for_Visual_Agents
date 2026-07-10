@@ -122,14 +122,64 @@ class Pipeline:
                 print(f"Generated skill: {plan.skill_slug} (domain: {domain})")
             else:
                 print(f"Audit failed for {plan.skill_slug}, skipping.")
-        
 
-    def _select_representative_trajectory(self, skill, all_trajs):
+    def _select_best_trajectory(self, skill, all_trajs):
         covered_ids = skill.get('covered_task_ids', [])
-        for traj in all_trajs:
-            if traj.task_id in covered_ids:
-                return traj
-        return None
+        candidates = [traj for traj in all_trajs if traj.task_id in covered_ids]
+        if not candidates:
+            return None
+
+        def score(traj):
+            # 1. 完成度得分（40%）
+            completion_score = 1.0 if traj.task_completed else 0.3
+
+            # 2. 对齐分数（30%），范围 0-100
+            align = traj.alignment_score if traj.alignment_score is not None else 50
+            align_score = max(0.0, min(1.0, align / 100.0))
+
+            # 3. 效率分数（20%），范围 0-100
+            eff = traj.efficiency_score if traj.efficiency_score is not None else 50
+            eff_score = max(0.0, min(1.0, eff / 100.0))
+
+            # 4. 步骤长度得分（10%）
+            step_count = len(traj.steps)
+            if step_count < 3:
+                length_score = 0.1
+            elif 3 <= step_count <= 5:
+                length_score = 0.6
+            elif 5 < step_count <= 20:
+                length_score = 1.0
+            elif 20 < step_count <= 30:
+                length_score = 0.7
+            else:
+                length_score = 0.4
+
+            # 5. 任务难度微调（权重约为 ±1.5%，仅作为加分/减分项）
+            # [改进] 若难度数据缺失，则不进行任何调整（factor = 1.0）
+            if traj.task_difficulty is not None:
+                diff = traj.task_difficulty
+                # 假设 difficulty 范围 1-5，3 为最佳（通用代表性）
+                difficulty_score = 1.0 - 0.15 * abs(diff - 3)
+                # 限制范围，避免极端值（防止负数）
+                difficulty_score = max(0.7, min(1.0, difficulty_score))
+                # 微调因子：范围 0.985 ~ 1.0，幅度极小
+                factor = 0.95 + 0.05 * difficulty_score
+            else:
+                # 数据缺失：保持中性，不倾斜
+                factor = 1.0
+
+            # 加权综合得分
+            total = (0.40 * completion_score +
+                     0.30 * align_score +
+                     0.20 * eff_score +
+                     0.10 * length_score)
+
+            # 应用难度微调
+            total *= factor
+            return total
+
+        best = max(candidates, key=score)
+        return best
     
 
 if __name__ == "__main__":

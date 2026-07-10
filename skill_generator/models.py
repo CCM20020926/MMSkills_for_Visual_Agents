@@ -7,7 +7,6 @@ class TrajectoryStep(BaseModel):
     observation: str
     action: str
     code: str
-    #last_step_correct: bool
     correct: bool
     reflection: Optional[str] = ""
 
@@ -16,6 +15,9 @@ class Trajectory(BaseModel):
     instruction: str
     domain: str
     task_completed: bool
+    task_difficulty: int
+    alignment_score: int
+    efficiency_score: int
     steps: List[TrajectoryStep]
 
 # ========== plan.json 模型 ==========
