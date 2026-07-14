@@ -18,6 +18,7 @@ class GroundingDINODetector:
         inputs = self.processor(images=image, text=query, return_tensors="pt").to(self.device)
         with torch.no_grad():
             outputs = self.model(**inputs)
+            
         results = self.processor.post_process_grounded_object_detection(
             outputs,
             inputs.input_ids,
@@ -25,12 +26,14 @@ class GroundingDINODetector:
             text_threshold=text_threshold,
             target_sizes=[image.size[::-1]]
         )
+        
         if len(results) > 0 and len(results[0]['boxes']) > 0:
             boxes = results[0]['boxes']
             if len(boxes) > 0:
                 box = boxes[0].cpu().numpy().astype(int)
                 x1, y1, x2, y2 = box[0], box[1], box[2], box[3]
                 return (x1, y1, x2, y2)
+        
         return None
 
 class ImageGrounder:
@@ -47,6 +50,7 @@ class ImageGrounder:
             for state in proc.states:
                 if step_idx >= len(success_segment):
                     step_idx = len(success_segment) - 1
+                    
                 step = success_segment[step_idx]
                 screenshot_path = step.image
                 img = Image.open(screenshot_path).convert("RGB")
@@ -78,13 +82,16 @@ class ImageGrounder:
                             y2 = min(img.height, y2+pad)
                             focus_crop = img.crop((x1,y1,x2,y2))
                             break
+                        
                 if focus_crop is None:
                     w,h = img.size
                     focus_crop = img.crop((w//4, h//4, w*3//4, h*3//4))
+                
                 focus_filename = f"{state.state_name}_focus_crop.png"
                 focus_crop.save(self.Images_dir / focus_filename)
 
                 step_idx += 1
+        
         return plan
 
     def generate_runtime_cards(self, plan: Plan, domain: str, skill_failure_steps: List[TrajectoryStep]) -> RuntimeStateCards:
@@ -117,13 +124,16 @@ class ImageGrounder:
                     for s in related_failures[:2]:
                         if s.observation:
                             visible_cues.append(f"Observed: {s.observation}")
+                
                 if not visible_cues:
                     visible_cues = [state.visual_grounding]
+                
                 for target in state.key_frame.highlight_targets:
                     visible_cues.append(f"A {target.color} box marks the {target.name} as {target.target_type}.")
 
                 full_path = f"Images/{state.key_frame.image_filename}"
                 focus_path = f"Images/{state.key_frame.image_filename.replace('.png', '_focus_crop.png')}"
+                
                 available_views = [
                     AvailableView(view_type="full_frame", image_path=full_path, use_for="recognize_global_ui_state", label=state.state_name),
                     AvailableView(view_type="focus_crop", image_path=focus_path, use_for="inspect_contextual_work_region", label=f"{state.state_name}_focus")
@@ -150,4 +160,5 @@ class ImageGrounder:
             domain=domain,
             states=states
         )
+        
         return cards

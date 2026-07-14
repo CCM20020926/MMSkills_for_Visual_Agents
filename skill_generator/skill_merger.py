@@ -1,13 +1,14 @@
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
+from models import ClusterPlan, GeneralSkillList
 
 class SkillMerger:
     def __init__(self, llm: ChatOpenAI, config):
-        self.llm = llm.with_structured_output(method="json_mode")
+        self.llm = llm.with_structured_output(GeneralSkillList)
         self.config = config
 
-    def merge(self, plans):
+    def merge(self, plans: list[ClusterPlan]) -> list[GeneralSkillList]:
         """
         合并同一 domain 下的多个规划结果（ClusterPlan）。
         每个技能将携带其专属的 common_failure_modes。
@@ -31,7 +32,7 @@ class SkillMerger:
         merged_skills = self._merge_skills(candidates_with_failures)
         return merged_skills
 
-    def _merge_skills(self, candidates_with_failures):
+    def _merge_skills(self, candidates_with_failures) -> list[GeneralSkillList]:
         if not candidates_with_failures:
             return []
         
@@ -53,10 +54,11 @@ Return a JSON array of merged skills (each with a dedicated common_failure_modes
         response = self.llm.invoke(prompt.format_messages(
             candidates=json.dumps(candidates_with_failures, indent=2)
         ))
-        merged = json.loads(response.content) if hasattr(response, 'content') else response
+        merged = response.skills
 
         # 过滤过宽技能（覆盖任务比例过高）
         total_tasks = sum([len(s.get('covered_task_ids', [])) for s in merged])
         threshold = self.config.get('coverage_ratio_threshold', 0.6)
         filtered = [s for s in merged if len(s.get('covered_task_ids', [])) / max(1, total_tasks) <= threshold]
+        
         return filtered

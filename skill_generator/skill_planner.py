@@ -18,11 +18,12 @@ class SkillPlanner:
             all_failed_steps.extend(fails)
 
         success_summary = ""
-        for task_id, seg in all_success_segments[:15]:
+        for task_id, seg in all_success_segments:  # 未做截断处理
             actions = [f"{s.action}" for s in seg if s.action]
             success_summary += f"Task {task_id}: " + " -> ".join(actions) + "\n"
+            
         failure_summary = ""
-        for task_id, fstep in all_failed_steps[:15]:
+        for task_id, fstep in all_failed_steps:  # 未做截断处理
             failure_summary += (f"Task {task_id}: Action: {fstep.action}, "
                                 f"Observation: {fstep.observation}, "
                                 f"Reflection: {fstep.reflection}\n")

@@ -95,4 +95,5 @@ class AgentNetLoader:
                     'context': context_steps,
                     'step_index': i
                 })
+                
         return contexts

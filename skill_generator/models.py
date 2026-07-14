@@ -59,7 +59,7 @@ class DecisionGuide(BaseModel):
     choose_capability: str
     reason: str
 
-class Plan(BaseModel):
+class SkillPlan(BaseModel):
     overview: str
     when_to_use: List[str]
     preconditions: List[str]
@@ -105,6 +105,17 @@ class AtomicSkill(BaseModel):
     workflow_boundary: str          # 宏观边界描述
     completion_criteria: str
     covered_task_ids: List[str]     # 覆盖的任务ID列表
+    
+class GeneralSkill(BaseModel):
+    skill_name: str
+    description: str
+    workflow_boundary: str          # 宏观边界描述
+    completion_criteria: str
+    covered_task_ids: List[str]     # 覆盖的任务ID列表
+    common_failure_mode: str
+
+class GeneralSkillList(BaseModel):
+    skills: List[GeneralSkill]
 
 class FailurePattern(BaseModel):
     failure_description: str
