@@ -19,8 +19,10 @@ class AgentNetLoader:
             for line in f:
                 item = json.loads(line)
                 steps = []
+                
                 for step_data in item.get('traj', []):
                     value = step_data.get('value', {})
+                    
                     step = TrajectoryStep(
                         image=str(self.image_root / step_data.get('image', '')),
                         observation=value.get('observation', ''),
@@ -45,6 +47,7 @@ class AgentNetLoader:
                 domain = traj.domain
                 if domain not in trajs_data:
                     trajs_data[domain] = []
+                    
                 trajs_data[domain].append(traj)
                 
         return trajs_data
@@ -62,16 +65,21 @@ class AgentNetLoader:
         success_segments = []
         current_segment = []
         failed_steps = []
+        
         for step in traj.steps:
             if step.correct:
                 current_segment.append(step)
+            
             else:
                 if len(current_segment) >= min_segment_len:
                     success_segments.append((traj.task_id, current_segment))
+                
                 current_segment = []
                 failed_steps.append((traj.task_id, step))
+        
         if len(current_segment) >= min_segment_len:
             success_segments.append((traj.task_id, current_segment))
+        
         return success_segments, failed_steps
     
     @staticmethod

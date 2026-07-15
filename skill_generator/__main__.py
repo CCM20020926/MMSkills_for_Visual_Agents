@@ -10,61 +10,156 @@ from skill_drafter import TextDrafter
 from image_grounder import GroundingDINODetector, ImageGrounder
 from auditor import Auditor
 from models import *
+from tqdm import tqdm
+from util import get_logger
+import os
+import json
+from concurrent.futures import ThreadPoolExecutor
+
+NAME = "skill_generator"
+
+def save_cache_json(data, name, logger):
+    logger.info(f"Save cache `{name}.json`.")
+    with open(f"cache/{name}.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+        
+
+def save_skill(skill_dir, skill_name, text, plan, logger):
+    logger.info(f"Save skill `{skill_name}`.")
+    
+    # 保存 plan.json
+    with open(f"{skill_dir}/plan.json", "w", encoding="utf-8") as f:
+        json.dump(plan.model_dump(), f, ensure_ascii=False, indent=4)
+    
+    # 保存 skill.md
+    with open(f"{skill_dir}/SKILL.md", "w", encoding="utf-8") as f:
+        f.write(text)
 
 
 def pipeline(domain, trajs: list[Trajectory], config: dict):
     # 1. 聚类轨迹
+    logger = get_logger(NAME)
+
+    logger.info(f"Start {domain} clustering.")
     llm = ChatOpenAI(model_name=config.get('llm_model', 'gpt-4o'), temperature=0)
     
     cluster = Clusterer(n_clusters=config.get('n_clusters', 20))
-    cluster = clusters = cluster.fit_predict(trajs)
+    clusters = cluster.fit_predict(trajs)
+    
+    logger.info(f"Total {len(clusters)} clusters.")
+    
+    save_cache_json(clusters, f"{domain}_clusters.json", logger)
     
     # 2. 规划技能
+    logger.info(f"Start {domain} planning atomic skills.")
     planner = SkillPlanner(llm)
     
     plans = []
     
-    for cluster_trajs in clusters.values():
+    for cluster_trajs in tqdm(clusters.values(), desc=f"{domain} - plan"):
         plan: ClusterPlan = planner.plan_cluster(cluster_trajs)
         plans.append(plan)
     
+    logger.info(f"Total {len(plans)} atomic skills.")
+    
+    cache_plans = [plan.model_dump() for plan in plans]
+    save_cache_json(cache_plans, f"{domain}_plans.json", logger)
+
+
     # 3. 合并技能
+    logger.info(f"Start {domain} merging atomic skills.")
     merger = SkillMerger(llm, config)
     skills = merger.merge(plans)
+    
+    logger.info(f"Total {len(skills)} after merging.")
+    
+    cache_skills = [skill.model_dump() for skill in skills]
+    save_cache_json(cache_skills, f"{domain}_skills.json", logger)
     
     # 4. 草拟技能文档
     drafter = TextDrafter(llm)
     
+    detector = GroundingDINODetector(device=config.get('device', 'cuda'))
+    
+    pass_audit = {}
+    
     for skill in skills:
+        logger.info(f"Drafting skill {domain} - {skill.skill_name}.")
         repr_trajs = select_representative_trajectory(skill, trajs)
+        logger.debug(f"Selected representative trajectories for {domain} - {skill.skill_name} {repr_trajs}.")
+        
         plan = drafter.draft_plan(skill, domain, repr_trajs)
-        drafter.draft_markdown(plan)
+        text = drafter.draft_markdown(plan)
+            
+        skill_dir = os.path.join("skill_library", domain, f"{domain.upper()}_{skill.skill_name}")
+        
+        save_skill(skill_dir, f"{domain.upper()}_{skill.skill_name}", text, plan, logger)
     
-    # 5. 图像标注
-    image_grounder = ImageGrounder()
+        # 5. 图像标注
+        logger.info(f"Start {domain} - {skill.skill_name} grounding images.")
+        image_grounder = ImageGrounder(output_dir=skill_dir, detector=detector)
+        
+        success_segments = []
+        
+        skill_failure_steps = []
+        
+        for traj in repr_trajs:
+            success_steps, failure_steps = AgentNetLoader.split_by_success_with_id(traj)
+            success_segments.extend(success_steps[1])
+            skill_failure_steps.extend(failure_steps[1])
+        
+        updated_plan = image_grounder.ground_plan(skills, success_segments)
+        
+        with open(f"{skill_dir}/plan.json", "w", encoding="utf-8") as f:
+            json.dump(updated_plan.model_dump(), f, ensure_ascii=False, indent=4)
+        
+        logger.info(f"Update plan.json for {domain} - {skill.skill_name}.")
+        
+        cards = image_grounder.generate_runtime_cards(updated_plan, domain, skill_failure_steps)
+        
+        with open(f"{skill_dir}/runtime_state_cards.json", "w", encoding="utf-8") as f:
+            json.dump(cards.model_dump(), f, ensure_ascii=False, indent=4)
+        
+        logger.info(f"Save runtime_state_cards.json for {domain} - {skill.skill_name}.")
     
-    success_segments = extract_success_segments(trajs)
+        # 6. 审核
+        logger.info(f"Start {domain} - {skill.skill_name} auditing.")
+        
+        auditor = Auditor(skill_dir)
+        
+        result = auditor.audit(plan, cards)
+        
+        pass_audit[skill.skill_name] = result
+        
+        logger.info(f"Audit result for {domain} - {skill.skill_name}: {result}.")
+        
+        
+    return {"domain": pass_audit}
     
-    image_grounder.ground_plan(skills, success_segments)
-    
-    image_grounder.generate_runtime_cards()
-    
-    # 6. 审核
-    
-    # 7. 返回
-    ...
-    
-
-
+   
 def main():
         # 0. 加载数据（按 domain 聚合）
     loader = AgentNetLoader()
     trajs_data: dict[str, list[Trajectory]] = loader.load()
+    
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    
+    all_audit_results = {}
+    
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = []
+        for domain, trajs in trajs_data.items():
+            futures.append(executor.submit(pipeline, domain, trajs, config))
+        
+        for future in futures:
+            result = future.result()
+            all_audit_results.update(result)
+    
+    with open("audit_results.json", "w", encoding="utf-8") as f:
+        json.dump(all_audit_results, f, ensure_ascii=False, indent=4)
         
  
-def extract_success_segments(trajs: list[Trajectory]):
-    ...
-
 def select_representative_trajectory(self, skill, all_trajs, k=10):
     covered_ids = skill.covered_task_ids
     candidates = [traj for traj in all_trajs if traj.task_id in covered_ids]
@@ -107,16 +202,14 @@ def select_representative_trajectory(self, skill, all_trajs, k=10):
 
         # 5. 任务难度微调（权重约为 ±1.5%，仅作为加分/减分项）
         # [改进] 若难度数据缺失，则不进行任何调整（factor = 1.0）
+        # 5. 任务难度微调（factor 范围 0.85~1.0，基于 diff 自然值）
         if traj.task_difficulty is not None:
             diff = traj.task_difficulty
-            
-            difficulty_score = 1.0 - 0.15 * abs(diff - 3)
-            
-            difficulty_score = max(0.7, min(1.0, difficulty_score))
-            # 微调因子：范围 0.985 ~ 1.0，幅度极小
-            factor = 0.95 + 0.05 * difficulty_score
+            best = 6
+            max_dev = 4  # max(10-6, 6-4) = 4
+            norm_dev = abs(diff - best) / max_dev
+            factor = 1.0 - 0.15 * norm_dev
         else:
-            # 数据缺失：保持中性，不倾斜
             factor = 1.0
 
         # 加权综合得分
@@ -134,4 +227,5 @@ def select_representative_trajectory(self, skill, all_trajs, k=10):
 
 
 if __name__ == "__main__":
+    os.makedirs("cache", exist_ok=True)
     main()

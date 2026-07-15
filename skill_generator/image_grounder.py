@@ -5,6 +5,9 @@ from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection
 from PIL import Image, ImageDraw
 from models import Plan, RuntimeStateCards, RuntimeState, AvailableView
 from models import TrajectoryStep
+from util import get_logger
+
+logger = get_logger("ImageGrounder")
 
 class GroundingDINODetector:
     def __init__(self, model_name="IDEA-Research/grounding-dino-tiny", device=None):
@@ -49,7 +52,8 @@ class ImageGrounder:
         for proc in plan.procedures:
             for state in proc.states:
                 if step_idx >= len(success_segment):
-                    step_idx = len(success_segment) - 1
+                    logger.warning(f"Not enough steps in success_segment to ground all states. Stopping at step index {step_idx}.")
+                    return plan
                     
                 step = success_segment[step_idx]
                 screenshot_path = step.image
@@ -61,7 +65,7 @@ class ImageGrounder:
                     if bbox is not None:
                         x1,y1,x2,y2 = bbox
                         draw.rectangle([x1,y1,x2,y2], outline=target.color, width=3)
-                        draw.text((x1, max(0,y1-10)), target.name, fill=target.color)
+                        # draw.text((x1, max(0,y1-10)), target.name, fill=target.color)
 
                 full_filename = f"{state.state_name}.png"
                 full_path = self.Images_dir / full_filename
