@@ -1,11 +1,14 @@
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 import torch
 from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection
 from PIL import Image, ImageDraw
 from models import Plan, RuntimeStateCards, RuntimeState, AvailableView
 from models import TrajectoryStep
 from util import get_logger
+import json
+from typing import cast
+
 
 logger = get_logger("ImageGrounder")
 
@@ -98,71 +101,70 @@ class ImageGrounder:
         
         return plan
 
-    def generate_runtime_cards(self, plan: Plan, domain: str, skill_failure_steps: List[TrajectoryStep]) -> RuntimeStateCards:
-        states = []
-        for proc in plan.procedures:
-            for state in proc.states:
-                if state.state_id == 1:
-                    stage = "entry_state"
-                    image_role = "state_cue"
-                elif state.is_result_state:
-                    stage = "expected_after_action"
-                    image_role = "expected_after_action"
-                else:
-                    stage = "operation_state"
-                    image_role = "state_cue"
+    def generate_runtime_cards(
+        self, 
+        llm,
+        plan: Plan,
+        domain: str,
+        success_segments_ctx: List[Tuple[str, List[TrajectoryStep]]],
+        failure_steps_ctx: List[Tuple[str, TrajectoryStep]],
+        example_cards: List[Dict],
+    ) -> RuntimeStateCards:
+         # 构造示例文本（直接使用 dict 的 JSON 字符串）
+        examples_text = ""
+        for idx, cards_dict in enumerate(example_cards):
+            cards_json = json.dumps(cards_dict, indent=2, ensure_ascii=False)
+            examples_text += f"\n--- Example {idx+1} ---\nRuntimeStateCards:\n{cards_json}\n"
 
-                related_failures = [s for s in skill_failure_steps if (state.state_name in s.observation) or (state.action in s.action)]
-                when_not_to_use = "Do not use this card when the current UI state does not match the expected condition. "
-                if related_failures:
-                    fail_descs = [f"{s.reflection}" for s in related_failures if s.reflection]
-                    if fail_descs:
-                        when_not_to_use += " ".join(fail_descs[:2])
-                    else:
-                        when_not_to_use += "For example, when you observe " + "; ".join([s.observation for s in related_failures[:2] if s.observation])
-                else:
-                    when_not_to_use += "the necessary preconditions are not met."
-
-                visible_cues = []
-                if related_failures:
-                    for s in related_failures[:2]:
-                        if s.observation:
-                            visible_cues.append(f"Observed: {s.observation}")
+        current_plan_json = json.dumps(plan.model_dump(), indent=2, ensure_ascii=False)
+        
+        success_context = ""
+        if success_segments_ctx:
+            for instr, seg in success_segments_ctx:
+                steps_text = "\n".join([
+                    f"  Step {i+1}: Observation: {s.observation} | Action: {s.action} | Reflection: {s.reflection or 'N/A'}"
+                    for i, s in enumerate(seg[:8])
+                ])
+                success_context += f"Instruction: {instr}\nSteps:\n{steps_text}\n"
                 
-                if not visible_cues:
-                    visible_cues = [state.visual_grounding]
+        failure_context = ""
+        if failure_steps_ctx:
+            for instr, step in failure_steps_ctx:
+                failure_context += f"Instruction: {instr} | Observation: {step.observation} | Action: {step.action} | Reflection: {step.reflection or 'N/A'}\n"
                 
-                for target in state.key_frame.highlight_targets:
-                    visible_cues.append(f"A {target.color} box marks the {target.name} as {target.target_type}.")
+        
+        prompt = f"""
+You are an expert in creating runtime_state_cards for AI agents.
+Generate a JSON object following the RuntimeStateCards schema based on the given plan and execution traces.
 
-                full_path = f"Images/{state.key_frame.image_filename}"
-                focus_path = f"Images/{state.key_frame.image_filename.replace('.png', '_focus_crop.png')}"
-                
-                available_views = [
-                    AvailableView(view_type="full_frame", image_path=full_path, use_for="recognize_global_ui_state", label=state.state_name),
-                    AvailableView(view_type="focus_crop", image_path=focus_path, use_for="inspect_contextual_work_region", label=f"{state.state_name}_focus")
-                ]
+**Examples:**
+{examples_text}
 
-                runtime_state = RuntimeState(
-                    state_id=state.state_name,
-                    state_name=state.state_name,
-                    stage=stage,
-                    image_role=image_role,
-                    when_to_use=f"Use this card when {state.trigger_condition}.",
-                    when_not_to_use=when_not_to_use,
-                    visible_cues=visible_cues,
-                    verification_cue=state.text_description + " and verify the expected visual outcome.",
-                    visual_evidence_chain={"focus_crop": "preserves broader working region", "before": "not needed", "after": "not needed"},
-                    visual_risk="Treat the example as state evidence only. Do not transfer literal coordinates, example values, or example-specific content.",
-                    preferred_view_order=["full_frame", "focus_crop"],
-                    available_views=available_views
-                )
-                states.append(runtime_state)
+**Current Plan:**
+{current_plan_json}
 
-        cards = RuntimeStateCards(
-            skill_slug=plan.skill_slug,
-            domain=domain,
-            states=states
-        )
+**Domain:** {domain}
+
+**Execution Context:**
+Successful segments (with task instructions):
+{success_context}
+
+Failed steps (with task instructions):
+{failure_context}
+
+**Instructions:**
+- Output pure JSON only, no explanations.
+- Use the same structure and detail level as examples.
+- `when_to_use` from successful observations, and reference the task instruction if helpful.
+- `when_not_to_use` from failed steps.
+- `visible_cues` from visual features in observations.
+- `verification_cue` from completion patterns.
+- Include all states from the plan.
+
+Only JSON object.
+"""
+        structured_llm = llm.with_structured_output(RuntimeStateCards)
+        cards = cast(RuntimeStateCards, structured_llm.invoke(prompt))
         
         return cards
+        

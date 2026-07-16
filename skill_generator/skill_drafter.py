@@ -1,13 +1,20 @@
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from models import SkillPlan, Trajectory
+from models import SkillPlan, Trajectory, RuntimeStateCards
 
 class TextDrafter:
     def __init__(self, llm: ChatOpenAI):
         self.llm = llm.with_structured_output(SkillPlan)
 
-    def draft_plan(self, merged_skill, domain, trajectories: list[Trajectory]):
+    def draft_plan(self, merged_skill, domain, trajectories: list[Trajectory], example_plans: list[dict]):
+        
+        examples_text = ""
+        if example_plans:
+            for idx, ex_plan in enumerate(example_plans):
+                ex_json = json.dumps(ex_plan, indent=2, ensure_ascii=False)
+                examples_text += f"\n--- Example Plan {idx+1} ---\n```json\n{ex_json}\n```\n"
+        
         prompt = ChatPromptTemplate.from_template("""
 You are a skill documenter. Create a detailed plan for the following skill from the **{domain}** domain.
 
@@ -35,6 +42,9 @@ Each trajectory is a JSON object with the following fields:
 
 Trajectories:
 {trajectories}
+
+**Reference Examples of well-structured SkillPlan:**
+{examples_text}
 
 The plan must include:
 - overview
@@ -65,7 +75,8 @@ Return a JSON object matching the Plan schema.
             workflow_boundary=merged_skill.get('workflow_boundary', ''),
             completion_criteria=merged_skill.get('completion_criteria', ''),
             trajectories=json.dumps(self._format_trajectories(trajectories), indent=2),
-            failure_modes=json.dumps(merged_skill.get('common_failure_modes', []), indent=2)
+            failure_modes=json.dumps(merged_skill.get('common_failure_modes', []), indent=2),
+            examples_text=examples_text
         ))
         return plan
 
@@ -88,34 +99,52 @@ Return a JSON object matching the Plan schema.
         
         return results
 
-    def draft_markdown(self, plan: SkillPlan):
-        lines = [
-            f"---\nname: {plan.skill_name}\ndescription: {plan.overview}\n---",
-            f"# {plan.skill_name}",
-            "## Overview",
-            plan.overview,
-            "## When This Skill Applies",
-            "\n".join([f"- {w}" for w in plan.when_to_use]),
-            "## Visual State Card Usage",
-            "Use `runtime_state_cards.json` for runtime branch loading. The runtime should load only the card whose `when_to_use` matches the current screenshot.",
-        ]
-        for proc in plan.procedures:
-            for state in proc.states:
-                lines.append(f"- `Images/{state.key_frame.image_filename}`: {state.text_description}")
-        lines.append("Red boxes mark interaction cues. Green boxes mark state or verification cues.")
-        lines.append("## Procedure")
-        for proc in plan.procedures:
-            for i, state in enumerate(proc.states):
-                lines.append(f"{i+1}. {state.text_description} (see `Images/{state.key_frame.image_filename}`)")
-        lines.append("## Visual Transfer Limits")
-        lines.append("- Do not copy example values or window layout from the images.")
-        lines.append("- Do not assume elements appear at the same screen coordinates.")
-        lines.append("## Result Verification Cues")
-        result_states = [s for proc in plan.procedures for s in proc.states if s.is_result_state]
-        if result_states:
-            last = result_states[-1]
-            lines.append(f"- {last.text_description} and verify that the expected outcome is visible.")
-        lines.append("## Common Failure Modes")
-        for fail in plan.common_failure_modes:
-            lines.append(f"- {fail}")
-        return "\n".join(lines)
+    def draft_markdown(self, plan: SkillPlan, cards: RuntimeStateCards, example_markdowns) -> str:
+        """
+        结合 plan 和 runtime_state_cards，利用少样本示例生成 SKILL.md。
+        """
+
+        # 将 plan 和 cards 转为结构化文本
+        plan_text = self._plan_to_text(plan)
+        cards_text = self._cards_to_text(cards)
+
+        # 构建 few-shot 示例
+        examples_text = "\n\n---\n\n".join(example_markdowns)
+
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are a technical writer creating SKILL.md documentation for AI agents. The documentation should be clear, structured, and practical."),
+            ("user", f"""
+Here are some examples of well-written SKILL.md files:
+
+{examples_text}
+
+Now, based on the following skill plan and runtime state cards, generate a new SKILL.md file.
+Follow the same structure and level of detail as the examples.
+
+**Skill Plan (overview, procedures, atomic capabilities, etc.):**
+{plan_text}
+
+**Runtime State Cards (per-state decision cues):**
+{cards_text}
+
+**Requirements:**
+- Output pure Markdown, with frontmatter (---) at the top.
+- Include sections: Overview, When This Skill Applies, Preconditions, Visual State Card Usage, Visual Transfer Limits, Result Verification Cues, Atomic Capabilities, Procedures, Common Failure Modes.
+- Use the runtime state cards to enrich the Procedure descriptions: each state's `when_to_use` and `visible_cues` can be summarized in the corresponding procedure step.
+- The "Visual State Card Usage" section should explain how to use the cards at runtime.
+- Ensure the output is self-contained and actionable for an agent.
+""")
+        ])
+        response = self.llm.invoke(prompt)
+        return response.content
+    
+    
+    def _plan_to_text(self, plan: SkillPlan):
+        text = f"```json\n{json.dumps(plan.model_dump(), ensure_ascii=False, indent=2)}\n```"
+        return text
+    
+    def _plan_to_cards(self, cards: RuntimeStateCards):
+        text = f"```json\n{json.dumps(cards.model_dump(), ensure_ascii=False, indent=2)}\n```"
+        return text
+        
+        

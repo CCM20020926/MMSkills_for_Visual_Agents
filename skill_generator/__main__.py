@@ -21,21 +21,8 @@ NAME = "skill_generator"
 def save_cache_json(data, name, logger):
     logger.info(f"Save cache `{name}.json`.")
     with open(f"cache/{name}.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump(data, f, ensure_ascii=False, indent=2)
         
-
-def save_skill(skill_dir, skill_name, text, plan, logger):
-    logger.info(f"Save skill `{skill_name}`.")
-    
-    # 保存 plan.json
-    with open(f"{skill_dir}/plan.json", "w", encoding="utf-8") as f:
-        json.dump(plan.model_dump(), f, ensure_ascii=False, indent=4)
-    
-    # 保存 skill.md
-    with open(f"{skill_dir}/SKILL.md", "w", encoding="utf-8") as f:
-        f.write(text)
-
-
 def pipeline(domain, trajs: list[Trajectory], config: dict):
     # 1. 聚类轨迹
     logger = get_logger(NAME)
@@ -88,40 +75,55 @@ def pipeline(domain, trajs: list[Trajectory], config: dict):
         repr_trajs = select_representative_trajectory(skill, trajs)
         logger.debug(f"Selected representative trajectories for {domain} - {skill.skill_name} {repr_trajs}.")
         
-        plan = drafter.draft_plan(skill, domain, repr_trajs)
-        text = drafter.draft_markdown(plan)
+        plan = drafter.draft_plan(skill, domain, repr_trajs, ...)  # 加入少样本示例
             
         skill_dir = os.path.join("skill_library", domain, f"{domain.upper()}_{skill.skill_name}")
-        
-        save_skill(skill_dir, f"{domain.upper()}_{skill.skill_name}", text, plan, logger)
-    
+            
         # 5. 图像标注
         logger.info(f"Start {domain} - {skill.skill_name} grounding images.")
         image_grounder = ImageGrounder(output_dir=skill_dir, detector=detector)
-        
+                
         success_segments = []
-        
         skill_failure_steps = []
         
         for traj in repr_trajs:
             success_steps, failure_steps = AgentNetLoader.split_by_success_with_id(traj)
-            success_segments.extend(success_steps[1])
-            skill_failure_steps.extend(failure_steps[1])
+            
+            success_segments.extend(success_steps)
+            skill_failure_steps.extend(failure_steps)
+            
+        # 从所有片段中选最长的一条作为接地源
+        if success_segments:
+            # 按步骤长度降序排序，取最长片段
+            best_segment = max(success_segments, key=lambda x: len(x[1]))[1]   # 只取 steps 列表
         
-        updated_plan = image_grounder.ground_plan(skills, success_segments)
+        else:
+            
+            logger.warning(f"No success segments found for skill {skill.skill_name}.")
+            
+            best_segment = []
+        
+        updated_plan = image_grounder.ground_plan(skills, best_segment)
         
         with open(f"{skill_dir}/plan.json", "w", encoding="utf-8") as f:
-            json.dump(updated_plan.model_dump(), f, ensure_ascii=False, indent=4)
+            json.dump(updated_plan.model_dump(), f, ensure_ascii=False, indent=2)
         
-        logger.info(f"Update plan.json for {domain} - {skill.skill_name}.")
+        logger.info(f"Save plan.json for {domain} - {skill.skill_name}.")
         
-        cards = image_grounder.generate_runtime_cards(updated_plan, domain, skill_failure_steps)
+        cards = image_grounder.generate_runtime_cards(llm, updated_plan, domain, success_segments, skill_failure_steps, ...)  # 选取代表性 runtime_state_cards
         
         with open(f"{skill_dir}/runtime_state_cards.json", "w", encoding="utf-8") as f:
-            json.dump(cards.model_dump(), f, ensure_ascii=False, indent=4)
+            json.dump(cards.model_dump(), f, ensure_ascii=False, indent=2)
         
         logger.info(f"Save runtime_state_cards.json for {domain} - {skill.skill_name}.")
-    
+        
+        text = drafter.draft_markdown(updated_plan, cards, ...)   # 选取代表性 SKILL.md
+        
+        with open(f"{skill_dir}/SKILL.md", "w", encoding="utf-8") as f:
+            f.write(text)
+        
+        logger.info(f"Save SKILL.md for {domain} - {skill.skill_name}.")
+
         # 6. 审核
         logger.info(f"Start {domain} - {skill.skill_name} auditing.")
         

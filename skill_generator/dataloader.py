@@ -60,7 +60,7 @@ class AgentNetLoader:
     ) -> Tuple[List[Tuple[str, List[TrajectoryStep]]], List[Tuple[str, TrajectoryStep]]]:
         """
         将轨迹拆分为成功步骤片段和失败步骤。
-        返回: ( (task_id, 成功步骤列表)列表, (task_id, 失败步骤)列表 )
+        返回: ( (instruction, 成功步骤列表)列表, (instruction, 失败步骤)列表 )
         """
         success_segments = []
         current_segment = []
@@ -72,13 +72,13 @@ class AgentNetLoader:
             
             else:
                 if len(current_segment) >= min_segment_len:
-                    success_segments.append((traj.task_id, current_segment))
+                    success_segments.append((traj.instruction, current_segment))
                 
                 current_segment = []
-                failed_steps.append((traj.task_id, step))
+                failed_steps.append((traj.instruction, step))
         
         if len(current_segment) >= min_segment_len:
-            success_segments.append((traj.task_id, current_segment))
+            success_segments.append((traj.instruction, current_segment))
         
         return success_segments, failed_steps
     
